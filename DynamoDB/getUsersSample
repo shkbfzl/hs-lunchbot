@@ -1,0 +1,13 @@
+var params = { 
+    TableName: "Users",
+    Key: {
+        "Name": "JosiahWong"
+    }
+};
+
+docClient.get(params, function(err, data) {
+    if (err)
+        console.log(JSON.stringify(err, null, 2));
+    else
+        console.log(JSON.stringify(data, null, 2));
+});
