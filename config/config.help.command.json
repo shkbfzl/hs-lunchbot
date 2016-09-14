@@ -1,0 +1,9 @@
+{
+	"commands": [
+		{
+			"name": "add",
+			"syntax": "/lunchio add place <name-of-place>",
+			"description": "Add a lunch place to your profile."
+		}
+	]
+}
