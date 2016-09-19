@@ -1,4 +1,7 @@
+var _ = require('underscore');
+
 var config = require('./../config/config.help.command.json');
+
 
 /**
  * Module to construct the response to the help command.
@@ -14,10 +17,19 @@ function HelpCommand() {
  * quick response can be sent to the user.
  */
 HelpCommand.prototype.buildResponse = function() {
-	var response = 'Lunch.io is a tool that can help your team choose a lunch destination faster.\n';
+	var response = {};
+	var cmdsLen = config.commands.length;
 
-	for (var cmd in config.commands) {
-		response += this.createCommandResponse(cmd);
+	response.text = 'Lunch.io is a tool that can help your team choose a lunch destination faster.';
+	response.attachments = [];
+
+	for (var i = 0; i < cmdsLen;i++) {
+		var cmd = config.commands[i];
+		var attachment = {};
+
+		attachment.text = this.createCommandResponse(cmd);
+
+		response.attachments.push(attachment);
 	}
 
 	this.response = response;
@@ -39,7 +51,9 @@ HelpCommand.prototype.getResponse = function() {
  * @return {String}     Response format.
  */
 HelpCommand.prototype.createCommandResponse = function(cmd) {
-	return cmd.name + '\n';
+	var response = _.template('>>> *<%= description %>* \n <%= syntax %>');
+
+	return response(cmd);
 };
 
-module.exports = new HelpCommand();
+module.exports = HelpCommand;
