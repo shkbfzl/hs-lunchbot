@@ -31,12 +31,18 @@ describe('Help Command test', function() {
 		 	}, ReferenceError, 'syntax is not defined');
 		});
 
-		it('Returns Reference error for missing syntax', function() {
-			var data = {description: 'test001',
-						syntax: 'test002'};
+		it('Returns response with no description or syntax filled in', function() {
 			var data = {description: null,
 						syntax: null};
 			var template = '>>> ** \n ';
+
+		 	assert.equal(command.createCommandResponse(data), template);
+		});
+
+		it('Returns response with description and syntax filled in.', function() {
+			var data = {description: 'test001',
+						syntax: 'test002'};
+			var template = '>>> *test001* \n test002';
 
 		 	assert.equal(command.createCommandResponse(data), template);
 		});
