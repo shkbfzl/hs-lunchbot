@@ -2,8 +2,39 @@
 	"commands": [
 		{
 			"name": "add",
-			"syntax": "/lunchio add place <name-of-place>",
-			"description": "Add a lunch place to your profile."
+			"syntax": "/lunchio add (user|place|ban) (@<user-id>|<food-place>|<ban-place>)",
+			"description": "Create a user profile. Add or ban a food place to profile.",
+			"examples": [
+				"/lunchio add user @johnSmith",
+				"/lunchio add place Potbelly",
+				"/lunchio add ban Cosi"
+			]
+		},
+		{
+			"name": "myList",
+			"syntax": "/lunchio myList",
+			"description": "Show all places and bans in your profile.",
+			"examples": []
+		},
+		{
+			"name": "invite",
+			"syntax": "/lunchio invite <user>...",
+			"description": "Invite friends to lunch",
+			"examples": [
+				"/lunchio invite @johnSmith @maryWilson @georgeJohnson"
+			]
+		},
+		{
+			"name": "accept",
+			"syntax": "/lunchio accept",
+			"description": "Accept a lunch invitation.",
+			"examples": []
+		},
+		{
+			"name": "what's for lunch?",
+			"syntax": "/lunchio what's for lunch?",
+			"description": "Generate three suggestions for lunch.",
+			"examples": []
 		}
 	]
 }

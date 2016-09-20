@@ -24,27 +24,72 @@ describe('Help Command test', function() {
 		 	assert.throws(function() {
 		 		command.createCommandResponse(data)
 		 	}, ReferenceError, 'syntax is not defined');
-
-		 	data.syntax = null;
-		 	assert.doesNotThrow(function() {
-		 		command.createCommandResponse(data)
-		 	}, ReferenceError, 'syntax is not defined');
 		});
 
-		it('Returns response with no description or syntax filled in', function() {
+		it('Does not return Reference error for missing examples', function() {
+			var data = {description: 'Some description',
+						syntax: 'Some syntax'};
+
+			// Examples are defaulted to an empty string
+		 	assert.doesNotThrow(function() {
+		 		command.createCommandResponse(data)
+		 	}, ReferenceError, 'examples is not defined');
+		});
+
+		it('Returns response with no data filled in', function() {
 			var data = {description: null,
-						syntax: null};
-			var template = '>>> ** \n ';
+						syntax: null,
+						examples: null};
+			var template = '> ** \n>  \n> ';
 
 		 	assert.equal(command.createCommandResponse(data), template);
 		});
 
 		it('Returns response with description and syntax filled in.', function() {
 			var data = {description: 'test001',
-						syntax: 'test002'};
-			var template = '>>> *test001* \n test002';
+						syntax: 'test002',
+						examples: ['test003']};
+			var template = '> *test001* \n> test002 \n> `test003`';
 
 		 	assert.equal(command.createCommandResponse(data), template);
+		});
+	});
+
+	describe('Tests for createExampleResponse', function() {
+
+		it('Returns String with two backticks given null value.', function() {
+			assert.equal(command.addExampleResponse(null), '');
+		});
+
+		it('Returns input String between two backticks', function () {
+			assert.equal(command.addExampleResponse('test001'), 'Example: `test001`');
+		});
+
+		it('Returns input Number between two backticks', function () {
+			assert.equal(command.addExampleResponse(42), '`42`');
+		});
+	});
+
+	describe('Tests for createExamplesResponse', function() {
+
+		it('Returns empty string given null value.', function() {
+			assert.equal(command.createExamplesResponse(null), '');
+		});
+
+		it('Returns empty string given empty list of examples.', function() {
+			assert.equal(command.createExamplesResponse([]), '');
+		});
+
+		it('Returns single example, between backticks.', function() {
+			var data = ['test001'];
+
+			assert.equal(command.createExamplesResponse(data), '`test001`\n');
+		});
+
+		it('Returns multiple example, between backticks.', function() {
+			var data = ['test001', 'test002'];
+
+			assert.equal(command.createExamplesResponse(data), '`test001`\n`test002`\n');
 		});
 	});
 });
