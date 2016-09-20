@@ -9,7 +9,6 @@ var HelloCmd = require('src/command/Hello.js');
 var BaseCmd = require('src/command/Base.js');
 var log = require('log4js').getLogger("Hello.spec");
 
-
 describe("command/Hello", function (){
 
     it("Check inheritance", function() {
@@ -22,9 +21,12 @@ describe("command/Hello", function (){
     it("Test run", function() {
 
         var cmd  = new HelloCmd();
-        var output = cmd.run();
 
-        assert.isTrue(output == "Hello, are you hungry?");
+        cmd.run(function(result) {
+
+            assert.isTrue(result == "Hello, are you hungry?");
+        });
+
     });
 
     it("Test attributes", function() {
@@ -34,10 +36,14 @@ describe("command/Hello", function (){
             name: 'mickey'
         });
         log.info ("class options = ",cmd.options);
-        assert.isTrue(cmd.name == 'hello');
-        assert.isTrue(cmd.options.name == 'mickey'); // You can't override name
-        assert.isTrue(cmd.options.lang == 'fr');
-        assert.isTrue(cmd.options.badAttribute == undefined);
+
+        cmd.run(function(result) {
+
+            assert.isTrue(cmd.name == 'hello');
+            assert.isTrue(cmd.options.name == 'mickey'); // You can't override name
+            assert.isTrue(cmd.options.lang == 'fr');
+            assert.isTrue(cmd.options.badAttribute == undefined);
+        })
     });
 
 })

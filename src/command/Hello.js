@@ -13,11 +13,19 @@ module.exports = BaseCmd.extend({
     name: "hello",
     description: "Being nice",
 
+    initialize: function(){
+        this._super();
+    },
+
     /**
+     * Call resolve when your command run successfully
      *
-     * @returns {string}
+     * Call reject after an error
+     *
+     * @param resolve
+     * @param reject
      */
-    run: function() {
+    run: function(resolve, reject) {
 
         /*
          * ---------------------------------
@@ -25,7 +33,7 @@ module.exports = BaseCmd.extend({
          * ---------------------------------
          */
 
-        return "Hello, are you hungry?";
+        resolve( "Hello, are you hungry?");
     }
 })
 

@@ -33,10 +33,16 @@ exports.handler = function (event, context, callback) {
 
         var engine = new NLPEngine(nlpRoute);
 
-        var response = engine.process(text)
+        engine.process(text, function(error, result){
 
-        log.debug("Response= "+response);
+            if (error) {
+                callback(error);
+                return;
+            }
 
-        callback(null, {"text": response});
+            log.debug("Response= "+result);
+            callback(null, {"text": result})
+        });
+
     })
 };

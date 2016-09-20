@@ -7,8 +7,8 @@ require('rootpath')();
 var log = require("log4js").getLogger(__filename);
 var Config = require("config");
 var BaseCommand = require('src/command/Base.js');
+var CmdDescriptor = require('src/core/CommandDescriptor.js');
 var Class = require('backbone-class');
-
 
 module.exports = Class.extend({
 
@@ -26,19 +26,33 @@ module.exports = Class.extend({
 
     resolveCommand: function(index, text) {
         // Return command descriptor
+        // new CmdDescriptor()
     },
 
-    process: function(text) {
+    process: function(text, callback) {
 
-        var indexedRoute = this.buildRouteIndex();
-        var descriptor = this.resolveCommand(indexedRoute, text);
-        var command = descriptor.getCommand();
+        // For safety let's catch all unhandled error
+        try{
 
-        if (!(descriptor instanceof BaseCommand)) {
-            throw new CommandError("Invalid command "+descriptor);
+            var indexedRoute = this.buildRouteIndex();
+            var descriptor = this.resolveCommand(indexedRoute, text);
+            var command = descriptor.createCommand();
+
+            command.handle()
+                .then(function(result){
+
+                    callback(null, result)
+                })
+                .fail(function(e){
+
+                    log.error(e);
+                    callback(e)
+                })
         }
-
-        return command.run() ;
+        catch (e) {
+            log.error(e);
+            callback(e);
+        }
     }
 
 })

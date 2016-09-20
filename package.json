@@ -8,6 +8,7 @@
     "backbone-class": "0.0.2",
     "extend-error": "0.0.2",
     "log4js": "^0.6.38",
+    "node-promise": "^0.5.12",
     "rootpath": "^0.1.2",
     "underscore": "^1.8.3"
   },

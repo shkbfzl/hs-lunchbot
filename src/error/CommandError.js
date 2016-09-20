@@ -3,7 +3,6 @@
  */
 
 require('rootpath')();
-
-var Error = require('extend-error');
+require('extend-error');
 
 module.exports = Error.extend('CommandError');
