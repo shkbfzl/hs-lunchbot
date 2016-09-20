@@ -2,4 +2,6 @@
  * App default configuration
  */
 
-module.exports = { }
+module.exports = {
+    env: "development"
+}

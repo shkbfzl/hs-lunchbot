@@ -3,8 +3,6 @@
  *
  */
 
-//var log = require('log4js');
-
 modules.exports = {
 
     'Hello': [

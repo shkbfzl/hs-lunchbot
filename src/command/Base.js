@@ -18,5 +18,13 @@ module.exports = Class.extend({
     run: function() {
 
         throw new Error('You must override this method');
+    },
+
+    toString: function() {
+        var obj = {
+            name: this.name,
+            description: this.name,
+        }
+        return obj
     }
 })

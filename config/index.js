@@ -16,10 +16,12 @@ try{
     envConfig = require(__dirname+"/"+env+".js");
 }
 catch(e){
-    log.warn("Can't load config file: "+e.getMessage());
-    log.warn(e);
+    log.warn("Can't load config file, "+e);
+    //log.warn(e);
 }
 
 config = _.extend(config, envConfig);
+
+log.debug("Configuration file= \n"+JSON.stringify(config, null, '\t'));
 
 module.exports = config;
