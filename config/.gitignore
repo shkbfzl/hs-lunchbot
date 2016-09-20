@@ -1,0 +1,6 @@
+.*
+!.gitignore
+!default.js
+!dev.js
+!index.js
+!prod.js

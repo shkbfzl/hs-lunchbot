@@ -1,1 +1,1 @@
-# hs-lunchbot
+# HS Lunch Bot
