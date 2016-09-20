@@ -2,13 +2,8 @@
  * Created by mohamed.kante on 9/19/16.
  */
 
+require('rootpath')();
 
-var CommandError = function () {
-    Error.apply(this);
-};
+var Error = require('extend-error');
 
-CommandError.prototype.constructor = CommandError;
-
-CommandError.prototype = Object.create(Error);
-
-module.exports = CommandError;
+module.exports = Error.extend('CommandError');

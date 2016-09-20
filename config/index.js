@@ -5,14 +5,14 @@ var log = require("log4js").getLogger("config"),
     _ = require('underscore'),
     config,
     envConfig,
-    env = process.env.HS_LUNCH_ENV
+    env = process.env.LUNCH_BOT_ENV
     ;
 
 log.debug("Loading default config file");
 config = require(__dirname+"/default");
 
 try{
-    log.debug("Detecting enviroment= "+env);
+    log.debug("Detecting LUNCH_BOT_ENV enviroment= "+env);
     envConfig = require(__dirname+"/"+env+".js");
 }
 catch(e){
