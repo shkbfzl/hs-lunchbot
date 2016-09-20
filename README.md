@@ -42,20 +42,20 @@ At the root
   |- /specs
 ```
 
-- **config** - Content different environment config
+- **config** - Contains different environment config
 
-- **lib** - Content external libraries that are not available on NPM
+- **lib** - Contains external libraries that are not available on NPM
 
-- **src** - Content all the project classes
+- **src** - Contains all the project classes
 	- **command** - You new command should be store here (Don't forget to extend **BaseCommand** class)
-	- **core** - Content core classes
-	- **core** - Content custom error classes
-	- **model** - Content datasource models like: DynamoDb, MongoDb, Redis, etc...
-	- **util** - Content helper functions
+	- **core** - Contains core classes
+	- **core** - Contains custom error classes
+	- **model** - Contains datasource models like: DynamoDb, MongoDb, Redis, etc...
+	- **util** - Contains helper functions
 
 - **test** 
-	- **resource** - Content test resource files
-	- **specs** - Content unit test specs. Each classes' unit test should be organise following his directory structure. For example:
+	- **resources** - Contains test resource files
+	- **specs** - Contains unit test specs. Each classes' unit test should be organise following his directory structure. For example:
 	
 	```
 	
