@@ -16,7 +16,7 @@ module.exports = Class.extend({
 
     initialize: function(route) {
 
-        this.routes = route;
+        this.route = route;
     },
 
     buildRouteIndex: function(){
@@ -34,7 +34,7 @@ module.exports = Class.extend({
         var descriptor = this.resolveCommand(indexedRoute, text);
         var command = descriptor.getCommand();
 
-        if (descriptor instanceof BaseCommand) {
+        if (!(descriptor instanceof BaseCommand)) {
             throw new CommandError("Invalid command "+descriptor);
         }
 
