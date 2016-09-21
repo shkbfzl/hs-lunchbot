@@ -21,12 +21,14 @@ exports.handler = function (event, context, callback) {
 
     engine.process(message, function(error, result){
 
+        var resultText = result;
         if (error) {
-            callback(error);
-            return;
+            //callback(error.message);
+            //callback(null, {"text": error.message})
+            resultText = error.message ;
         }
 
-        log.debug("Response= "+result);
-        callback(null, {"text": result})
+        log.debug("Error= "+error+", Response= "+result);
+        callback(null, {"text": resultText})
     });
 };
