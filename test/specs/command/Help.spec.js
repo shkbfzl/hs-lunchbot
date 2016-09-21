@@ -98,4 +98,11 @@ describe('Help Command test', function() {
 			assert.equal(command.createExamplesResponse(data), 'Example: `test001`\nExample: `test002`\n');
 		});
 	});
+
+	describe('Tests for getCommandResponse', function() {
+
+		it('Returns error when command cannot be found');
+
+		it('Returns correct response object');
+	});
 });

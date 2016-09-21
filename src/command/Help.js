@@ -9,13 +9,17 @@ var BaseCmd = require('src/command/Base');
 var config = require('config/config.help.command.json');
 
 module.exports = BaseCmd.extend({
+
+    response: null,
+    commandResponses: {},
     
     /**
      * Module to construct the response to the help command.
      */
     initialize: function() {
         this._super();
-        this.buildResponse();
+        this.commandResponses = this.buildCommandResponses(config.commands);
+        this.response = this.buildResponse();
     },
 
     run: function(resolve, reject) {
@@ -27,24 +31,45 @@ module.exports = BaseCmd.extend({
      *
      * Response should be built when module is loaded so 
      * quick response can be sent to the user.
+     *
+     * @return {Object} Describes aspects of a slack response.
      */
     buildResponse: function() {
         var response = {};
-        var cmdsLen = config.commands.length;
 
         response.text = 'Lunch.io is a tool that can help your team choose a lunch destination faster.';
         response.attachments = [];
 
+        _.each(this.commandResponses, function(cmdResponse) {
+            response.attachments.push(cmdResponse.attachment);
+        });
+
+        return response;
+    },
+
+    /**
+     * Builds all responses for all commands.
+     * 
+     * @param  {Array} commands List of command config objects.
+     * @return {Array}          List of command response objects.
+     */
+    buildCommandResponses: function(commands) {
+        var responses = [];
+        var cmdsLen = commands.length;
+
         for (var i = 0; i < cmdsLen;i++) {
-            var cmd = config.commands[i];
-            var attachment = {};
+            var cmd = commands[i];
+            var response = {
+                name: cmd.name,
+                attachment: {
+                    text: this.createCommandResponse(cmd)
+                }
+            };
 
-            attachment.text = this.createCommandResponse(cmd);
-
-            response.attachments.push(attachment);
+            responses.push(response);
         }
 
-        this.response = response;
+        return responses;
     },
 
     /**
@@ -54,6 +79,10 @@ module.exports = BaseCmd.extend({
      */
     getResponse: function() {
         return this.response;
+    },
+
+    getCommandResponse: function(cmdName) {
+        return _.findWhere(this.commandResponses, {'name':cmdName});
     },
 
     /**
