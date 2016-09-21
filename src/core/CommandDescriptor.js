@@ -5,6 +5,11 @@
 require('rootpath')();
 
 var Class = require('backbone-class');
+var log = require('log4js').getLogger(__filename);
+var MissingCmdError = require("src/error/MissingCommandError.js");
+var BaseCommand = require('src/command/Base.js');
+
+var cmdDir = 'src/command';
 
 module.exports = Class.extend({
 
@@ -13,16 +18,32 @@ module.exports = Class.extend({
     inputText: null,
 
     createCommand: function() {
+        var command,
+            cmdPath,
+            CmdClass
+            ;
 
-        // Under development
+        cmdPath = cmdDir+"/"+this.mappedCommandName+".js";
+
+        try{
+            log.info("Loading commad module= "+cmdPath);
+            CmdClass = require(cmdPath);
+        }
+        catch(e) {
+            log.error(e);
+            throw new MissingCmdError(e);
+        }
 
         /*
-
-        Make command is an instance of BaseCommand
+         * Pass command options if needed
+         */
+        command = new CmdClass({});
+        command.setDescriptor(this);
 
         if (!(command instanceof BaseCommand)) {
             throw new CommandError("Invalid command "+descriptor);
         }
-        */
+
+        return command;
     }
 });

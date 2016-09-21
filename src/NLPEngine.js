@@ -12,6 +12,7 @@ var NLPRouteIndexError = require('src/error/NLPRouteIndexError.js');
 var NLPNotMatchError = require('src/error/NLPNotMatchError.js');
 var CmdDescriptor = require('src/core/CommandDescriptor.js');
 
+var botTrigger = "/lunchbot";
 
 module.exports = Class.extend({
 
@@ -52,7 +53,7 @@ module.exports = Class.extend({
     resolveCommand: function(text) {
 
         if (text) {
-            text = text.trim();
+            text = text.replace(botTrigger, "").trim();
         }
 
         log.debug("Resolving language command descriptor")

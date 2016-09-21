@@ -27,12 +27,6 @@ module.exports = BaseCmd.extend({
      */
     run: function(resolve, reject) {
 
-        /*
-         * ---------------------------------
-         * Put all your command logic here
-         * ---------------------------------
-         */
-
         resolve( "Hello, are you hungry?");
     }
 })

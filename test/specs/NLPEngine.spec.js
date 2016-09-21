@@ -47,6 +47,7 @@ describe('NLPEngine', function(){
             text2 = "I want tomato",
             text3 = "I want  piZza  ",
             text4 = "I  like sushi",
+            text5 = "/lunchbot I  like sushi",
             descriptor,
             engine = new Engine(dummyRoute);
 
@@ -87,6 +88,11 @@ describe('NLPEngine', function(){
 
         it('Test text4', function() {
             descriptor = engine.resolveCommand(text4)
+            assert.isTrue(true);
+        });
+
+        it('Test text5', function() {
+            descriptor = engine.resolveCommand(text5)
             assert.isTrue(true);
         });
     })

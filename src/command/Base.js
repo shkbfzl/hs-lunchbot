@@ -13,12 +13,19 @@ module.exports = Class.extend({
     name: null,
     description: null,
 
+    _descriptor: null,
+
     initialize: function(){
         this._super();
     },
 
     run: function(resolve, reject) {
 
+        /*
+         * ---------------------------------
+         * Put all your command logic here
+         * ---------------------------------
+         */
         throw new Error('You must override this method');
     },
 
@@ -35,6 +42,14 @@ module.exports = Class.extend({
         }
 
         return defr;
+    },
+
+    setDescriptor: function(val) {
+        this._descriptor = val;
+    },
+
+    getDescriptor: function() {
+        return this._descriptor;
     },
 
     toString: function() {
