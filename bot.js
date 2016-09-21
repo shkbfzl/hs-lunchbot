@@ -11,7 +11,7 @@ var nlpRoute = require('src/NLPRoute.js');
 
 exports.handler = function (event, context, callback) {
     var engine,
-        text;
+        message = event.message;
 
     log.debug("----- BOT RUN -----");
     log.debug("Event= ", event);
@@ -19,7 +19,7 @@ exports.handler = function (event, context, callback) {
 
     engine = new NLPEngine(nlpRoute);
 
-    engine.process(text, function(error, result){
+    engine.process(message, function(error, result){
 
         if (error) {
             callback(error);

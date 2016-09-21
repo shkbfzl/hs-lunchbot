@@ -3,7 +3,7 @@
  *
  */
 
-modules.exports = {
+module.exports = {
 
     'Hello': [
         "hi\\s*",
