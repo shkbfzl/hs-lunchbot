@@ -8,9 +8,9 @@ var Class = require('backbone-class');
 
 module.exports = Class.extend({
 
-    routeName: null,
-    routeMatch: null,
+    dialectMatch: null,
     mappedCommandName: null,
+    inputText: null,
 
     createCommand: function() {
 

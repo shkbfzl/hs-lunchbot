@@ -4,7 +4,6 @@
 
 require('rootpath')();
 
-const lambda = new AWS.Lambda({region: 'us-west-2'});
 var NLPEngine = require('src/NLPEngine.js');
 var log = require('log4js').getLogger('Lamda');
 var nlpRoute = require('src/NLPRoute.js');
@@ -15,7 +14,8 @@ exports.handler = function (event, context, callback) {
         text;
 
     log.debug("----- BOT RUN -----");
-    log.debug("Parameters= ", data);
+    log.debug("Event= ", event);
+    log.debug("Context= ", context);
 
     engine = new NLPEngine(nlpRoute);
 
