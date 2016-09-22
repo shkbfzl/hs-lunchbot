@@ -17,7 +17,7 @@ module.exports = Class.extend({
     mappedCommandName: null,
     inputText: null,
 
-    createCommand: function() {
+    createCommand: function(options) {
         var command,
             cmdPath,
             CmdClass
@@ -37,7 +37,7 @@ module.exports = Class.extend({
         /*
          * Pass command options if needed
          */
-        command = new CmdClass({});
+        command = new CmdClass(options);
         command.setDescriptor(this);
 
         if (!(command instanceof BaseCommand)) {

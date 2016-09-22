@@ -13,7 +13,6 @@ module.exports = Class.extend({
     name: null,
     description: null,
 
-    slackContext: {},
     _descriptor: null,
 
     initialize: function(){

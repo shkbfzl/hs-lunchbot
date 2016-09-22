@@ -98,8 +98,7 @@ module.exports = Class.extend({
 
             var descriptor = this.resolveCommand(text);
 
-            var command = descriptor.createCommand();
-            command.slackContext = this.context;
+            var command = descriptor.createCommand(this.context);
 
             command.handle()
                 .then(function(result){
