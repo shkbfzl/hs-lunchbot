@@ -6,11 +6,13 @@ require('rootpath')();
 
 var assert = require('chai').assert;
 var HelpCommand = require('src/command/Help');
+var config = require('config/config.help.command.json');
 
 describe('Help Command test', function() {
 	var command;
 
 	beforeEach(function() {
+		config.commands = createStubConfig();
 		command = new HelpCommand();
 	});
 
@@ -94,15 +96,57 @@ describe('Help Command test', function() {
 
 		it('Returns multiple example, between backticks.', function() {
 			var data = ['test001', 'test002'];
+			var actual = command.createExamplesResponse(data);
 
-			assert.equal(command.createExamplesResponse(data), 'Example: `test001`\nExample: `test002`\n');
+			assert.equal(actual, 'Example: `test001`\nExample: `test002`\n');
 		});
 	});
 
 	describe('Tests for getCommandResponse', function() {
 
-		it('Returns error when command cannot be found');
+		it('Returns error when command cannot be found', function() {
+			var cmdName = 'testCmd000';
 
-		it('Returns correct response object');
+			assert.throws(function() {
+		 		command.getCommandResponse(cmdName);
+		 	}, Error, 'Command cannot be found.');
+		});
+
+		it('Returns correct response object', function() {
+			var cmdName = 'testCmd001';
+			var actual = command.getCommandResponse(cmdName);
+
+			assert.equal(actual.text, '> *This is testCmd001* \n> /bot testCmd001 \n> ');
+		});
+
+		it('Returns correct response object with examples', function() {
+			var cmdName = 'testCmd002';
+			var actual = command.getCommandResponse(cmdName);
+			var expected = '> *This is testCmd002* \n> /bot testCmd002 <param1> \n> Example: `/bot testCmd002 p1`\nExample: `/bot testCmd002 p2`\n';
+
+			assert.equal(actual.text, expected);
+		});
 	});
 });
+
+function createStubConfig() {
+	var commands = [];
+
+	commands.push({
+		name: 'testCmd001',
+		description: 'This is testCmd001',
+		syntax: '/bot testCmd001',
+		examples: []
+	});
+	commands.push({
+		name: 'testCmd002',
+		description: 'This is testCmd002',
+		syntax: '/bot testCmd002 <param1>',
+		examples: [
+			'/bot testCmd002 p1',
+			'/bot testCmd002 p2'
+		]
+	});
+
+	return commands;
+}

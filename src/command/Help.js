@@ -82,7 +82,13 @@ module.exports = BaseCmd.extend({
     },
 
     getCommandResponse: function(cmdName) {
-        return _.findWhere(this.commandResponses, {'name':cmdName});
+        var response = _.findWhere(this.commandResponses, {'name': cmdName});
+
+        if (!response) {
+            throw new Error('Command cannot be found.');
+        } else {
+            return response.attachment;
+        }
     },
 
     /**
