@@ -19,7 +19,9 @@
     "mocha": "^3.0.2"
   },
   "scripts": {
-    "test": "mocha --recursive test/specs/"
+    "test": "mocha --recursive test/specs/",
+		"dev": "node dev-server",
+		"build": "npm install && zip -r build/hs-lunchbot.zip * -x *.git* -x *buils* "
   },
   "repository": {
     "type": "git",
