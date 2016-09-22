@@ -47,7 +47,7 @@ describe('NLPEngine', function(){
             text2 = "I want tomato",
             text3 = "I want  piZza  ",
             text4 = "I  like sushi",
-            text5 = "/lunchbot I  like sushi",
+            text5 = "/lunchio I  like sushi",
             descriptor,
             engine = new Engine(dummyRoute);
 

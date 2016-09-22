@@ -13,6 +13,7 @@ module.exports = Class.extend({
     name: null,
     description: null,
 
+    slackContext: {},
     _descriptor: null,
 
     initialize: function(){
@@ -57,6 +58,7 @@ module.exports = Class.extend({
         var obj = {
             name: this.name,
             description: this.name,
+            slackContext: this.slackContext
         }
         return prettyjson(obj);
     }

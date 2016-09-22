@@ -6,7 +6,7 @@
 module.exports = {
 
     'Hello': [
-        "hi\\s*",
+        "h+i+\\s*",
         "hello\\s*",
         "holla\\s*",
         "Bonjour\\s*"

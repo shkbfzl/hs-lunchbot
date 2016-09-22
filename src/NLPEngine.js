@@ -12,12 +12,14 @@ var NLPRouteIndexError = require('src/error/NLPRouteIndexError.js');
 var NLPNotMatchError = require('src/error/NLPNotMatchError.js');
 var CmdDescriptor = require('src/core/CommandDescriptor.js');
 
-var botTrigger = "/lunchbot";
+var botTrigger = "/lunchio";
 
 module.exports = Class.extend({
 
     route: null,
     indexedRoute: {},
+
+    context: {},
 
     initialize: function(route) {
 
@@ -63,15 +65,16 @@ module.exports = Class.extend({
 
         for (var dialect in this.indexedRoute) {
 
-            dialect = "^"+dialect+"$";
-            var regx = new RegExp(dialect, 'i');
+            var pattern = "^"+dialect+"$";
+            var regx = new RegExp(pattern, 'i');
 
             var cmdClass = this.indexedRoute[dialect];
-            log.debug("Matching against: "+dialect)
+            log.debug("Matching against: "+pattern)
 
             if (regx.test(text)) {
 
                 log.debug("Dialect matched.")
+                log.debug("Command class ---> "+cmdClass);
                 descriptor = new CmdDescriptor();
                 descriptor.dialectMatch = dialect;
                 descriptor.mappedCommandName = cmdClass;
@@ -96,13 +99,14 @@ module.exports = Class.extend({
             var descriptor = this.resolveCommand(text);
 
             var command = descriptor.createCommand();
+            command.slackContext = this.context;
 
             command.handle()
                 .then(function(result){
 
                     callback(null, result)
-                })
-                .fail(function(e){
+
+                },function(e){
 
                     log.error(e);
                     callback(e)
