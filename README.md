@@ -152,7 +152,7 @@ For more information about [slack commands](https://api.slack.com/slash-commands
 
 Inside your command theses parameters are available in `options` as well
 
-##Dev server<a name=""evserver"></a>
+##Dev server<a name=""devserver"></a>
 
 ```
 WOKRING ON THIS
