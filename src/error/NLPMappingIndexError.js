@@ -5,4 +5,4 @@
 require('rootpath')();
 require('extend-error');
 
-module.exports = Error.extend('NLPRouteIndexError');
+module.exports = Error.extend('NLPMappingIndexError');

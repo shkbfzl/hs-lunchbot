@@ -6,7 +6,7 @@
 module.exports = {
 
     'Hello': {
-        lang: [
+        langs: [
             "h+i+\\s*",
             "hello\\s*",
             "holla\\s*",
@@ -14,4 +14,4 @@ module.exports = {
         ],
     }
     // Add more NLP routes here
-}
+};

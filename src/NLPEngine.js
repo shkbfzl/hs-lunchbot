@@ -8,7 +8,7 @@ var log = require("log4js").getLogger(__filename);
 var pretty_json = require('src/util/pretty_json.js');
 var Class = require('backbone-class');
 var _ = require('underscore');
-var NLPRouteIndexError = require('src/error/NLPRouteIndexError.js');
+var NLPRouteIndexError = require('src/error/NLPMappingIndexError.js');
 var NLPNotMatchError = require('src/error/NLPNotMatchError.js');
 var CmdDescriptor = require('src/core/CommandDescriptor.js');
 
@@ -17,7 +17,7 @@ var botTrigger = "/lunchio";
 module.exports = Class.extend({
 
     route: null,
-    indexedRoute: {},
+    indexedMapping: {},
 
     context: {},
 
@@ -25,14 +25,14 @@ module.exports = Class.extend({
 
         this.route = route;
 
-        this.indexedRoute = this._buildRouteIndex();
+        this.indexedMapping = this._buildMappingIndex();
     },
 
-    _buildRouteIndex: function(){
+    _buildMappingIndex: function(){
 
         var index = {};
 
-        log.debug("Indexing NLP route");
+        log.debug("Indexing NLP mapping");
 
         if (!this.route) {
             throw new NLPRouteIndexError("NLP route is invalid");
@@ -66,12 +66,12 @@ module.exports = Class.extend({
 
         var descriptor = null;
 
-        for (var dialect in this.indexedRoute) {
+        for (var dialect in this.indexedMapping) {
 
             var pattern = "^"+dialect+"$";
             var regx = new RegExp(pattern, 'i');
 
-            var params = this.indexedRoute[dialect];
+            var params = this.indexedMapping[dialect];
             log.debug("Matching against: "+pattern)
 
             if (regx.test(text)) {

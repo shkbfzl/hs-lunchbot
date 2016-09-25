@@ -29,7 +29,7 @@ exports.handler = function (event, context, callback) {
             log.warn(resultText);
         }
 
-        log.debug("Error= "+error+", Response= "+result);
-        callback(null, {"text": resultText})
+        log.debug("Error= "+error+", Response= ",result);
+        callback(null, result)
     });
 };

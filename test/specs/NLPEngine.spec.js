@@ -5,7 +5,7 @@ require('rootpath')();
 
 
 var assert = require('chai').assert;
-var NLPRouteIndexError = require('src/error/NLPRouteIndexError.js');
+var NLPRouteIndexError = require('src/error/NLPMappingIndexError.js');
 var NLPNotMatchError = require('src/error/NLPNotMatchError.js');
 var log = require('log4js').getLogger('NLPEngine.spec');
 var Engine = require('src/NLPEngine.js');
@@ -35,7 +35,7 @@ describe('NLPEngine', function(){
     it('Test routes index', function() {
 
         var engine = new Engine(dummyRoute);
-        var index = engine.indexedRoute;
+        var index = engine.indexedMapping;
         log.debug("Index = ", index);
 
         assert.isTrue(index["i\\s+want\\s+pizza"].parsers.length == 0);
