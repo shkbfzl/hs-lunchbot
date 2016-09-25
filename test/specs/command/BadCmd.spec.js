@@ -15,7 +15,7 @@ var CmdError = require('src/error/CommandError.js');
  */
 var UnhandledErrorCmd = BaseCmd.extend({
 
-    run: function(resolve, reject) {
+    run: function() {
         throw new CmdError("Don't run me!!");
     }
 });
@@ -25,9 +25,9 @@ var UnhandledErrorCmd = BaseCmd.extend({
  */
 var RejectCmd = BaseCmd.extend({
 
-    run: function(resolve, reject) {
+    run: function() {
 
-        reject("I'm not happy!!");
+        this.response.send("I'm not happy!!");
     }
 });
 
@@ -38,24 +38,26 @@ describe("BadCmd.spec", function (){
     it("UnhandledErrorCmd: should fail ", function() {
 
         var cmd  = new UnhandledErrorCmd();
-        cmd.handle()
-            .then(null, function(error){
+        try{
+            cmd.run();
+        }
+        catch (e) {
+            assert.isTrue(e instanceof CmdError);
+        }
 
-                assert.isTrue(e instanceof CmdError);
-            });
 
     });
 
-    it("RejectCmd: should reject promise ", function() {
+    it("RejectCmd: should triggger promise ", function(done) {
 
-        var cmd  = new UnhandledErrorCmd();
-        cmd.handle()
-            .then(null, function(error){
+        var cmd  = new RejectCmd();
+        cmd.run();
+        cmd.onDone(function(data){
 
-            assert.isTrue(false);
-            assert.isTrue("I'm not happy!!");
+            assert.isTrue(true);
+            assert.isTrue(data.text == "I'm not happy!!");
+            done();
         });
-
 
     });
 

@@ -38,12 +38,15 @@ module.exports = Class.extend({
             throw new NLPRouteIndexError("NLP route is invalid");
         }
 
-        _.each(this.route, function(phrases, commadClass) {
+        _.each(this.route, function(params, cmdClass) {
 
-            _.each (phrases, function(lang){
+            _.each (params.langs, function(lang){
 
                 lang = (lang+"").toLowerCase().trim();
-                index[lang] = commadClass;
+                index[lang] = {
+                    parsers: params.parsers || [],
+                    className: cmdClass
+                };
             });
         });
 
@@ -58,7 +61,7 @@ module.exports = Class.extend({
             text = text.replace(botTrigger, "").trim();
         }
 
-        log.debug("Resolving language command descriptor")
+        log.debug("Resolving language command descriptor");
         log.debug("Input text= |"+text+"|");
 
         var descriptor = null;
@@ -68,17 +71,18 @@ module.exports = Class.extend({
             var pattern = "^"+dialect+"$";
             var regx = new RegExp(pattern, 'i');
 
-            var cmdClass = this.indexedRoute[dialect];
+            var params = this.indexedRoute[dialect];
             log.debug("Matching against: "+pattern)
 
             if (regx.test(text)) {
 
                 log.debug("Dialect matched.")
-                log.debug("Command class ---> "+cmdClass);
+                log.debug("Command class ---> "+params.className);
                 descriptor = new CmdDescriptor();
                 descriptor.dialectMatch = dialect;
-                descriptor.mappedCommandName = cmdClass;
+                descriptor.mappedCommandName = params.className;
                 descriptor.inputText = text;
+                descriptor.parsers = params.parsers;
                 break;
             }
 
@@ -100,16 +104,13 @@ module.exports = Class.extend({
 
             var command = descriptor.createCommand(this.context);
 
-            command.handle()
-                .then(function(result){
+            command.onDone(function(result){
 
                     callback(null, result)
 
-                },function(e){
+                });
 
-                    log.error(e);
-                    callback(e)
-                })
+            command.run();
         }
         catch (e) {
             log.error(e);

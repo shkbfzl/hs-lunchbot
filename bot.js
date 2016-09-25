@@ -6,7 +6,7 @@ require('rootpath')();
 
 var NLPEngine = require('src/NLPEngine.js');
 var log = require('log4js').getLogger('Lamda');
-var nlpRoute = require('src/NLPRoute.js');
+var nlpMapping = require('src/NLPMapping.js');
 
 
 exports.handler = function (event, context, callback) {
@@ -17,7 +17,7 @@ exports.handler = function (event, context, callback) {
     log.debug("Event= ", event);
     log.debug("Context= ", context);
 
-    engine = new NLPEngine(nlpRoute);
+    engine = new NLPEngine(nlpMapping);
     engine.context = event;
 
     engine.process(message, function(error, result){

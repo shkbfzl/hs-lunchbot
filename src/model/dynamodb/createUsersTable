@@ -1,10 +1,10 @@
 var params = {
     TableName : "Users",
     KeySchema: [       
-        { AttributeName: "Name", KeyType: "HASH" }  //Partition key
+        { AttributeName: "Id", KeyType: "HASH" }  //Partition key
     ],
     AttributeDefinitions: [       
-        { AttributeName: "Name", AttributeType: "S" }
+        { AttributeName: "Id", AttributeType: "S" }
     ],
     ProvisionedThroughput: {       
         ReadCapacityUnits: 1, 

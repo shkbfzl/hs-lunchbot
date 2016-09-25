@@ -9,12 +9,15 @@ var NLPRouteIndexError = require('src/error/NLPRouteIndexError.js');
 var NLPNotMatchError = require('src/error/NLPNotMatchError.js');
 var log = require('log4js').getLogger('NLPEngine.spec');
 var Engine = require('src/NLPEngine.js');
+var CmdDescriptor = require('src/core/CommandDescriptor.js');
 
 var dummyRoute = {
-    'GoodFood': [
-        "I\\s+want\\s+pizza",
-        "I\\s+like\\s+sushi",
-    ]
+    'GoodFood': {
+        langs: [
+            "I\\s+want\\s+pizza",
+            "I\\s+like\\s+sushi",
+        ]
+    }
 };
 
 describe('NLPEngine', function(){
@@ -35,9 +38,11 @@ describe('NLPEngine', function(){
         var index = engine.indexedRoute;
         log.debug("Index = ", index);
 
-        assert.isTrue(index["i\\s+want\\s+pizza"] == 'GoodFood');
+        assert.isTrue(index["i\\s+want\\s+pizza"].parsers.length == 0);
+        assert.isTrue(index["i\\s+want\\s+pizza"].className == 'GoodFood');
 
-        assert.isTrue(index["i\\s+like\\s+sushi"] == 'GoodFood');
+        assert.isTrue(index["i\\s+like\\s+sushi"].parsers.length == 0);
+        assert.isTrue(index["i\\s+like\\s+sushi"].className == 'GoodFood');
 
     })
 
@@ -93,7 +98,14 @@ describe('NLPEngine', function(){
 
         it('Test text5', function() {
             descriptor = engine.resolveCommand(text5)
-            assert.isTrue(true);
+            assert.isTrue(descriptor instanceof CmdDescriptor);
+
+            log.info("Descriptor: ", descriptor);
+
+            assert.isTrue(descriptor.dialectMatch == 'i\\\s+like\\\s+sushi');
+            assert.isTrue(descriptor.mappedCommandName == 'GoodFood');
+            assert.isTrue(descriptor.inputText == 'I  like sushi');
+            assert.isTrue(descriptor.parsers.length == 0);
         });
     })
 })

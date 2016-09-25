@@ -18,16 +18,13 @@ module.exports = BaseCmd.extend({
     },
 
     /**
-     * Call resolve when your command run successfully
-     *
-     * Call reject after an error
      *
      * @param resolve
      * @param reject
      */
-    run: function(resolve, reject) {
+    run: function() {
 
-        resolve( "Hello, are you hungry?");
+        this.response.send("Hello, are you hungry?");
     }
-})
+});
 
