@@ -96,9 +96,8 @@ describe('Help Command test', function() {
 
 		it('Returns multiple example, between backticks.', function() {
 			var data = ['test001', 'test002'];
-			var actual = command.createExamplesResponse(data);
 
-			assert.equal(actual, 'Example: `test001`\nExample: `test002`\n');
+			assert.equal(command.createExamplesResponse(data), 'Example: `test001`\nExample: `test002`\n');
 		});
 	});
 
@@ -114,17 +113,34 @@ describe('Help Command test', function() {
 
 		it('Returns correct response object', function() {
 			var cmdName = 'testCmd001';
-			var actual = command.getCommandResponse(cmdName);
+			var expected = {
+				text: '> *This is testCmd001* \n> /bot testCmd001 \n> '
+			};
 
-			assert.equal(actual.text, '> *This is testCmd001* \n> /bot testCmd001 \n> ');
+			assert.deepEqual(command.getCommandResponse(cmdName), expected);
 		});
 
 		it('Returns correct response object with examples', function() {
 			var cmdName = 'testCmd002';
-			var actual = command.getCommandResponse(cmdName);
-			var expected = '> *This is testCmd002* \n> /bot testCmd002 <param1> \n> Example: `/bot testCmd002 p1`\nExample: `/bot testCmd002 p2`\n';
+			var expected = {
+				text: '> *This is testCmd002* \n> /bot testCmd002 <param1> \n> Example: `/bot testCmd002 p1`\nExample: `/bot testCmd002 p2`\n'
+			};
 
-			assert.equal(actual.text, expected);
+			assert.deepEqual(command.getCommandResponse(cmdName), expected);
+		});
+	});
+
+	describe('Tests for getResponse', function() {
+		it('Returns full response object', function() {
+			var expected = {};
+
+			expected.text = 'Lunch.io is a tool that can help your team choose a lunch destination faster.';
+			expected.attachments = [ 
+				{ text: '> *This is testCmd001* \n> /bot testCmd001 \n> ' },
+			    { text: '> *This is testCmd002* \n> /bot testCmd002 <param1> \n> Example: `/bot testCmd002 p1`\nExample: `/bot testCmd002 p2`\n'}
+			];
+
+			assert.deepEqual(command.getResponse(), expected);
 		});
 	});
 });
