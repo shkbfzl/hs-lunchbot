@@ -26,7 +26,7 @@ module.exports = BaseParser.extend({
         var names = text.match(reg);
         log.debug("Parser pattern matches= ", names);
 
-        return names;
+        return (!names)? [] : names;
     }
 
 });
