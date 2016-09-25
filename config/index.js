@@ -3,6 +3,7 @@
  */
 var log = require("log4js").getLogger("config"),
     _ = require('underscore'),
+    pretty_json = require('src/util/pretty_json.js'),
     config,
     envConfig,
     env = process.env.LUNCH_BOT_ENV
@@ -22,6 +23,6 @@ catch(e){
 
 config = _.extend(config, envConfig);
 
-log.debug("Configuration file= \n"+JSON.stringify(config, null, '\t'));
+log.debug("Configuration file= \n"+pretty_json(config));
 
 module.exports = config;

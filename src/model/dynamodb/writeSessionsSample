@@ -5,6 +5,14 @@ var params = {
         "Users": [
             "JosiahWong", "Mr. Smith"
         ],
+        "choices":[
+          "Elephant and Castle",
+          "Potbelly",
+          "Cafe Boston"
+        ]
+        "notPicked":[
+          {"JosiahWong": "Elephant and Castle"}
+        ]
         "LastModified": "2016-09-12"
     }
 };

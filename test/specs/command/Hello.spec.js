@@ -21,11 +21,11 @@ describe("command/Hello", function (){
     it("Test run", function() {
 
         var cmd  = new HelloCmd();
-
-        cmd.run(function(result) {
+        cmd.run();
+        cmd.onDone(function(error, result) {
 
             assert.isTrue(result == "Hello, are you hungry?");
-        });
+        })
 
     });
 
@@ -37,13 +37,15 @@ describe("command/Hello", function (){
         });
         log.info ("class options = ",cmd.options);
 
-        cmd.run(function(result) {
+        cmd.onDone(function(result) {
 
             assert.isTrue(cmd.name == 'hello');
             assert.isTrue(cmd.options.name == 'mickey'); // You can't override name
             assert.isTrue(cmd.options.lang == 'fr');
             assert.isTrue(cmd.options.badAttribute == undefined);
-        })
+        });
+
+        cmd.run();
     });
 
 })

@@ -4,29 +4,34 @@
 
 require('rootpath')();
 
-const lambda = new AWS.Lambda({region: 'us-west-2'});
 var NLPEngine = require('src/NLPEngine.js');
 var log = require('log4js').getLogger('Lamda');
-var nlpRoute = require('src/NLPRoute.js');
+var nlpMapping = require('src/NLPMapping.js');
 
 
 exports.handler = function (event, context, callback) {
     var engine,
-        text;
+        message = event.text;
 
     log.debug("----- BOT RUN -----");
-    log.debug("Parameters= ", data);
+    log.debug("Event= ", event);
+    log.debug("Context= ", context);
 
-    engine = new NLPEngine(nlpRoute);
+    engine = new NLPEngine(nlpMapping);
+    engine.context = event;
 
-    engine.process(text, function(error, result){
+    engine.process(message, function(error, data){
 
+        var response = data;
         if (error) {
-            callback(error);
-            return;
+
+            response = {
+                text: error.message
+                };
+            log.warn(response);
         }
 
-        log.debug("Response= "+result);
-        callback(null, {"text": result})
+        log.debug("Error= "+error+", Response= ",response);
+        callback(null, response)
     });
 };
