@@ -17,11 +17,6 @@ module.exports = BaseCmd.extend({
         this._super();
     },
 
-    /**
-     *
-     * @param resolve
-     * @param reject
-     */
     run: function() {
 
         this.response.send("Hello, are you hungry?");

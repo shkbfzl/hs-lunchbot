@@ -19,23 +19,8 @@ module.exports = BaseCmd.extend({
       this._super();
     },
 
-    /**
-     * Call resolve when your command run successfully
-     *
-     * Call reject after an error
-     *
-     * @param resolve
-     * @param reject
-     */
-    run: function(resolve, reject) {
-        resolve(
-          // get context object
-          //
+    run: function() {
 
-          // mark user as having picked
-          // if all users picked figure final
-        );
-
-        reject();
+        this.response.send("")
     }
 })
