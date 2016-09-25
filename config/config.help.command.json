@@ -1,25 +1,47 @@
 {
 	"commands": [
 		{
-			"name": "add",
-			"syntax": "/lunchio add (user|place|ban) (@<user-id>|<food-place>|<ban-place>)",
-			"description": "Create a user profile. Add or ban a food place to profile.",
+			"name": "add place",
+			"syntax": "/lunchio add place [restaurant]",
+			"description": "Add a restaurant to your favorites list.",
 			"examples": [
-				"/lunchio add user @johnSmith",
-				"/lunchio add place Potbelly",
-				"/lunchio add ban Cosi"
+				"/lunchio add place Potbelly"
 			]
 		},
 		{
-			"name": "myList",
-			"syntax": "/lunchio myList",
-			"description": "Show all places and bans in your profile.",
+			"name": "remove",
+			"syntax": "/lunchio remove [restaurant]",
+			"description": "Removes the restaurant from your favorites list.",
+			"examples": [
+				"/lunchio remove Potbelly"
+			]
+		},
+		{
+			"name": "ban",
+			"syntax": "/lunchio ban [restaurant]",
+			"description": "Add a restaurant to your banned list.",
+			"examples": [
+				"/lunchio ban Potbelly"
+			]
+		},
+		{
+			"name": "remove ban",
+			"syntax": "/lunchio remove ban [restaurant]",
+			"description": "Removes a restaurant from your banned list.",
+			"examples": [
+				"/lunchio ban Potbelly"
+			]
+		},
+		{
+			"name": "what's on my list",
+			"syntax": "/lunchio what's on my list",
+			"description": "Displays your favorited and banned lists.",
 			"examples": []
 		},
 		{
 			"name": "invite",
-			"syntax": "/lunchio invite <user>...",
-			"description": "Invite friends to lunch",
+			"syntax": "/lunchio invite @name...",
+			"description": "Invites friends to lunch",
 			"examples": [
 				"/lunchio invite @johnSmith @maryWilson @georgeJohnson"
 			]
