@@ -13,7 +13,7 @@ log.debug("Loading default config file");
 config = require(__dirname+"/default");
 
 try{
-    log.debug("Detecting LUNCH_BOT_ENV enviroment= "+env);
+    log.debug("Detecting LUNCHIO_ENV enviroment= "+env);
     envConfig = require(__dirname+"/"+env+".js");
 }
 catch(e){

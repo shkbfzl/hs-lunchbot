@@ -11,6 +11,7 @@
     "extend-error": "0.0.2",
     "log4js": "^0.6.38",
     "node-promise": "^0.5.12",
+    "qs": "^6.2.1",
     "rootpath": "^0.1.2",
     "underscore": "^1.8.3"
   },
@@ -20,8 +21,8 @@
   },
   "scripts": {
     "test": "mocha --recursive test/specs/",
-		"dev": "node dev-server",
-		"package": "npm install && zip -r build/hs-lunchbot.zip * -x *.git* -x *buils* "
+    "dev": "node dev-server",
+    "package": "npm install && zip -r build/hs-lunchbot.zip * -x *.git* -x *buils* "
   },
   "repository": {
     "type": "git",

@@ -79,7 +79,7 @@ At the root
 	```
 
 ## Environement
-The application environment is defined with env variable `LUNCH_BOT_ENV`.
+The application environment is defined with env variable `LUNCHIO_ENV`.
 The config module always load the `default.js` first then the environment config.
 
 ## Command interface
