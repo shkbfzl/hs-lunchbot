@@ -37,7 +37,10 @@ describe('CommandResponse', function(){
     it('Test public response', function(done) {
 
         var resp = new CmdResponse();
-        resp.attachText("mango").attachText('sushi');
+        resp.addAttachment({ text: "mango" })
+            .addAttachment()
+            .addAttachment(null)
+            .addAttachment({ text: 'sushi' });
         resp.public = true;
 
         resp.onSend(function(data){

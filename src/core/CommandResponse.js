@@ -7,7 +7,6 @@ require('rootpath')();
 var Class = require('backbone-class');
 var pretty_json = require('src/util/pretty_json');
 var log = require('log4js').getLogger(__filename);
-var deferred = require('node-promise').defer;
 var _ = require('underscore');
 
 
@@ -22,40 +21,24 @@ module.exports = Class.extend({
 
     initialize: function() {
         this.__attachements = [];
-        this._defr = deferred();
     },
 
-    attachText: function(message){
+    addAttachment: function(attement){
 
-        this._attachements.push({
-            text: message,
-        });
+        if (!attement) {
+            return this;
+        }
+
+        this._attachements.push(attement);
 
         return this;
-    },
-
-    attachView: function(view, params) {
-        /*
-         * UNDER DEVELOPMENT
-         */
-        return this;
-    },
-
-    getDeferred: function() {
-        return this._defr;
-    },
-
-    sendView: function(viewName, params) {
-        /*
-         * UNDER DEVELOPMENT
-         */
     },
 
     send: function(text){
 
         var data = this.buildResponse(text);
         log.debug("Response data= ", data);
-        this._defr.resolve(data);
+        this.trigger('send', data);
     },
 
     done:function() {
@@ -81,7 +64,8 @@ module.exports = Class.extend({
 
     onSend: function(callback) {
 
-        this._defr.then(callback);
+        this.on('send', callback.bind(this));
+        return this;
     },
 
     toString: function(){
