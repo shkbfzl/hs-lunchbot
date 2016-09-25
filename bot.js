@@ -20,16 +20,18 @@ exports.handler = function (event, context, callback) {
     engine = new NLPEngine(nlpMapping);
     engine.context = event;
 
-    engine.process(message, function(error, result){
+    engine.process(message, function(error, data){
 
-        var resultText = result;
+        var response = data;
         if (error) {
 
-            resultText = error.message ;
-            log.warn(resultText);
+            response = {
+                text: error.message
+                };
+            log.warn(response);
         }
 
-        log.debug("Error= "+error+", Response= ",result);
-        callback(null, result)
+        log.debug("Error= "+error+", Response= ",response);
+        callback(null, response)
     });
 };

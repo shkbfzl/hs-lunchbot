@@ -29,7 +29,7 @@ module.exports = BaseCmd.extend({
 
         // TODO getSession db call
         var session = this.options.sessionID;
-        
+
         var users = getSession(session).Item.Users;
         // pull places that aren't banned
         var places = _.each(users, this.removeBans);
