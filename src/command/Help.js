@@ -71,9 +71,7 @@ module.exports = BaseCmd.extend({
             var cmd = commands[i];
             var response = {
                 name: cmd.name,
-                attachment: {
-                    text: this.createCommandResponse(cmd)
-                }
+                attachment: this.createCommandResponseObject(cmd)
             };
 
             responses.push(response);
@@ -91,13 +89,27 @@ module.exports = BaseCmd.extend({
         return this.helpOutput;
     },
 
+    /**
+     * Retrieves the help response for a specific command.
+     *
+     * Throws an error if given command cannot be found.
+     * 
+     * @param  {String} cmdName Name of a command
+     * @return {}         [description]
+     */
     getCommandResponse: function(cmdName) {
-        var response = _.findWhere(this.commandResponses, {'name': cmdName});
+        var cmdResponse = _.findWhere(this.commandResponses, {'name': cmdName});
+        var template = _.template("*<%= description %>* \n<%= syntaxAndExamples %>");
+        var response = {};
 
-        if (!response) {
+        if (!cmdResponse) {
             throw new Error('Command cannot be found.');
         } else {
-            return response.attachment;
+            response.text = template({
+                description: cmdResponse.attachment.title, 
+                syntaxAndExamples: cmdResponse.attachment.text
+            });
+            return response;
         }
     },
 
@@ -107,14 +119,19 @@ module.exports = BaseCmd.extend({
      * @param  {Object} cmd Command object, defined in config.
      * @return {String}     Response format.
      */
-    createCommandResponse: function(cmd) {
-        var template = _.template('> *<%= description %>* \n> <%= syntax %> \n> <%= examplesText %>');
+    createCommandResponseObject: function(cmd) {
+        var response = {
+            "title": cmd.description,
+            "mrkdwn_in": ["text"]
+        };
+        var template = _.template('<%= syntax %> \n<%= examplesText %>');
         var examples = cmd.examples || [];
         var options = {};
 
         options.examplesText = this.createExamplesResponse(examples);
+        response.text = template(_.extend(cmd, options));
 
-        return template(_.extend(cmd, options));
+        return response;
     },
 
     /**
@@ -140,8 +157,8 @@ module.exports = BaseCmd.extend({
      * @return {String}         Example text with markup.
      */
     addExampleResponse: function(example) {
-        var ex = (example) ? 'Example: `' + example + '`' : '';
-        return ex;
+        var template = _.template("Example: `<%= example %>`");
+        return (example) ? template({example:example}) : "";
     }
 });
 

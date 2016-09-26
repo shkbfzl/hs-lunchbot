@@ -16,21 +16,24 @@ describe('Help Command test', function() {
 		command = new HelpCommand();
 	});
 
-	describe('Tests for createCommandResponse', function() {
+	describe('Tests for createCommandResponseObject', function() {
 
 		it('Returns Reference error for missing description', function() {
-			var data = {};
+			var data = {syntax: 'Some syntax'};
+			var response = {
+				"title": undefined,
+				"text": "Some syntax \n",
+				"mrkdwn_in": ["text"]
+			};
 
-		 	assert.throws(function() {
-		 		command.createCommandResponse(data)
-		 	}, ReferenceError, 'description is not defined');
+		 	assert.deepEqual(command.createCommandResponseObject(data), response);
 		});
 
 		it('Returns Reference error for missing syntax', function() {
 			var data = {description: 'Some description'};
 
 		 	assert.throws(function() {
-		 		command.createCommandResponse(data)
+		 		command.createCommandResponseObject(data)
 		 	}, ReferenceError, 'syntax is not defined');
 		});
 
@@ -40,7 +43,7 @@ describe('Help Command test', function() {
 
 			// Examples are defaulted to an empty string
 		 	assert.doesNotThrow(function() {
-		 		command.createCommandResponse(data)
+		 		command.createCommandResponseObject(data)
 		 	}, ReferenceError, 'examples is not defined');
 		});
 
@@ -48,56 +51,66 @@ describe('Help Command test', function() {
 			var data = {description: null,
 						syntax: null,
 						examples: null};
-			var template = '> ** \n>  \n> ';
+			var responseObj = {
+				"title": null,
+				"text": " \n",
+				"mrkdwn_in": [
+	                "text"
+	            ]
+			};
 
-		 	assert.equal(command.createCommandResponse(data), template);
+		 	assert.deepEqual(command.createCommandResponseObject(data), responseObj);
 		});
 
 		it('Returns response with data filled in.', function() {
 			var data = {description: 'test001',
 						syntax: 'test002',
 						examples: ['test003']};
-			var template = '> *test001* \n> test002 \n> Example: `test003`\n';
+			var responseObj = {
+				"title": "test001",
+				"text": "test002 \nExample: `test003`\n",
+				"mrkdwn_in": ["text"]
+			};
 
-		 	assert.equal(command.createCommandResponse(data), template);
+		 	assert.deepEqual(command.createCommandResponseObject(data), responseObj);
 		});
 	});
 
-	describe('Tests for createExampleResponse', function() {
+	describe('Tests for addExampleResponse', function() {
 
 		it('Returns String with two backticks given null value.', function() {
-			assert.equal(command.addExampleResponse(null), '');
+			assert.equal(command.addExampleResponse(null), "");
 		});
 
 		it('Returns input String between two backticks', function () {
-			assert.equal(command.addExampleResponse('test001'), 'Example: `test001`');
+			assert.equal(command.addExampleResponse('test001'), "Example: `test001`");
 		});
 
 		it('Returns input Number between two backticks', function () {
-			assert.equal(command.addExampleResponse(42), 'Example: `42`');
+			assert.equal(command.addExampleResponse(42), "Example: `42`");
 		});
 	});
 
 	describe('Tests for createExamplesResponse', function() {
 
 		it('Returns empty string given null value.', function() {
-			assert.equal(command.createExamplesResponse(null), '');
+			assert.equal(command.createExamplesResponse(null), "");
 		});
 
 		it('Returns empty string given empty list of examples.', function() {
-			assert.equal(command.createExamplesResponse([]), '');
+			assert.equal(command.createExamplesResponse([]), "");
 		});
 
 		it('Returns single example, between backticks.', function() {
 			var data = ['test001'];
 
-			assert.equal(command.createExamplesResponse(data), 'Example: `test001`\n');
+			assert.equal(command.createExamplesResponse(data), "Example: `test001`\n");
 		});
 
 		it('Returns multiple example, between backticks.', function() {
 			var data = ['test001', 'test002'];
 
-			assert.equal(command.createExamplesResponse(data), 'Example: `test001`\nExample: `test002`\n');
+			assert.equal(command.createExamplesResponse(data), "Example: `test001`\nExample: `test002`\n");
 		});
 	});
 
@@ -114,7 +127,7 @@ describe('Help Command test', function() {
 		it('Returns correct response object', function() {
 			var cmdName = 'testCmd001';
 			var expected = {
-				text: '> *This is testCmd001* \n> /bot testCmd001 \n> '
+				text: '*This is testCmd001* \n/bot testCmd001 \n'
 			};
 
 			assert.deepEqual(command.getCommandResponse(cmdName), expected);
@@ -123,7 +136,7 @@ describe('Help Command test', function() {
 		it('Returns correct response object with examples', function() {
 			var cmdName = 'testCmd002';
 			var expected = {
-				text: '> *This is testCmd002* \n> /bot testCmd002 <param1> \n> Example: `/bot testCmd002 p1`\nExample: `/bot testCmd002 p2`\n'
+				text: '*This is testCmd002* \n/bot testCmd002 <param1> \nExample: `/bot testCmd002 p1`\nExample: `/bot testCmd002 p2`\n'
 			};
 
 			assert.deepEqual(command.getCommandResponse(cmdName), expected);
@@ -136,8 +149,16 @@ describe('Help Command test', function() {
 
 			expected.text = 'Lunch.io is a tool that can help your team choose a lunch destination faster.';
 			expected.attachments = [ 
-				{ text: '> *This is testCmd001* \n> /bot testCmd001 \n> ' },
-			    { text: '> *This is testCmd002* \n> /bot testCmd002 <param1> \n> Example: `/bot testCmd002 p1`\nExample: `/bot testCmd002 p2`\n'}
+				{ 
+					"title": "This is testCmd001",
+					"text": "/bot testCmd001 \n",
+					"mrkdwn_in": ["text"]
+				},
+			    { 
+			    	"title": "This is testCmd002",
+			    	"text": "/bot testCmd002 <param1> \nExample: `/bot testCmd002 p1`\nExample: `/bot testCmd002 p2`\n",
+					"mrkdwn_in": ["text"]
+			    }
 			];
 
 			assert.deepEqual(command.getOutput(), expected);
