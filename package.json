@@ -13,6 +13,7 @@
     "node-promise": "^0.5.12",
     "qs": "^6.2.1",
     "rootpath": "^0.1.2",
+    "shortid": "^2.2.6",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
@@ -22,7 +23,7 @@
   "scripts": {
     "test": "mocha --recursive test/specs/",
     "dev": "node dev-server",
-    "package": "npm install && zip -r build/hs-lunchbot.zip * -x *.git* -x *buils* "
+    "package": "npm install && zip -r build/hs-lunchio.zip * -x *.git* -x *buils* "
   },
   "repository": {
     "type": "git",
