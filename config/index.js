@@ -3,7 +3,7 @@
  */
 var log = require("log4js").getLogger("config"),
     _ = require('underscore'),
-    pretty_json = require('src/util/pretty_json.js'),
+    pretty_json = require('../src/util/pretty_json.js'),
     config,
     envConfig,
     env = process.env.LUNCH_BOT_ENV
@@ -13,7 +13,7 @@ log.debug("Loading default config file");
 config = require(__dirname+"/default");
 
 try{
-    log.debug("Detecting LUNCHIO_ENV enviroment= "+env);
+    log.debug("Detecting LUNCH_BOT_ENV environment= "+env);
     envConfig = require(__dirname+"/"+env+".js");
 }
 catch(e){
