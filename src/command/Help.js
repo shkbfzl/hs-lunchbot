@@ -5,12 +5,13 @@
 require('rootpath')();
 
 var _ = require('underscore');
-var BaseCmd = require('src/command/Base');
+var BaseCmd = require('src/command/Base.js');
+var log = require('log4js').getLogger(__filename);
 var config = require('config/config.help.command.json');
 
 module.exports = BaseCmd.extend({
 
-    response: null,
+    helpOutput: null,
     commandResponses: {},
     
     /**
@@ -19,11 +20,20 @@ module.exports = BaseCmd.extend({
     initialize: function() {
         this._super();
         this.commandResponses = this.buildCommandResponses(config.commands);
-        this.response = this.buildResponse();
+        this.helpOutput = this.buildResponse();
     },
 
-    run: function(resolve, reject) {
-        resolve(this.getResponse());
+    run: function() {
+        log.debug(this.helpOutput);
+
+        var text = this.helpOutput.text ;
+        var self = this;
+
+        _.each(this.helpOutput.attachments, function(attmnt){
+            self.response.addAttachment(attmnt);
+        });
+
+        this.response.send(text);
     },
 
     /**
@@ -77,8 +87,8 @@ module.exports = BaseCmd.extend({
      * 
      * @return {String} Response text.
      */
-    getResponse: function() {
-        return this.response;
+    getOutput: function() {
+        return this.helpOutput;
     },
 
     getCommandResponse: function(cmdName) {
@@ -98,13 +108,13 @@ module.exports = BaseCmd.extend({
      * @return {String}     Response format.
      */
     createCommandResponse: function(cmd) {
-        var response = _.template('> *<%= description %>* \n> <%= syntax %> \n> <%= examplesText %>');
+        var template = _.template('> *<%= description %>* \n> <%= syntax %> \n> <%= examplesText %>');
         var examples = cmd.examples || [];
         var options = {};
 
         options.examplesText = this.createExamplesResponse(examples);
 
-        return response(_.extend(cmd, options));
+        return template(_.extend(cmd, options));
     },
 
     /**

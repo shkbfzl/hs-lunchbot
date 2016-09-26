@@ -140,7 +140,7 @@ describe('Help Command test', function() {
 			    { text: '> *This is testCmd002* \n> /bot testCmd002 <param1> \n> Example: `/bot testCmd002 p1`\nExample: `/bot testCmd002 p2`\n'}
 			];
 
-			assert.deepEqual(command.getResponse(), expected);
+			assert.deepEqual(command.getOutput(), expected);
 		});
 	});
 });

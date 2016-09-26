@@ -12,6 +12,10 @@ module.exports = {
             "holla\\s*",
             "Bonjour\\s*"
         ],
+    },
+    'Help': {
+        langs: [
+            "help"
+        ]
     }
-    // Add more NLP routes here
 };
