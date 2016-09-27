@@ -51,7 +51,7 @@ describe('Help Command test', function() {
 		it('Returns response with no data filled in', function() {
 			var data = {description: null,
 						syntax: null,
-						examples: null};
+						examples: null};;
 			var responseObj = {
 				"title": null,
 				"text": " \n",
@@ -67,9 +67,11 @@ describe('Help Command test', function() {
 			var data = {description: 'test001',
 						syntax: 'test002',
 						examples: ['test003']};
+			var stub = sinon.stub(command, "createExamplesResponse");
+			stub.returns("examplesResponse");
 			var responseObj = {
 				"title": "test001",
-				"text": "test002 \nExample: `test003`\n",
+				"text": "test002 \nexamplesResponse",
 				"mrkdwn_in": ["text"]
 			};
 
@@ -104,14 +106,18 @@ describe('Help Command test', function() {
 
 		it('Returns single example, between backticks.', function() {
 			var data = ['test001'];
+			var stub = sinon.stub(command, "addExampleResponse");
+			stub.returns("exampleResponse");
 
-			assert.equal(command.createExamplesResponse(data), "Example: `test001`\n");
+			assert.equal(command.createExamplesResponse(data), "exampleResponse\n");
 		});
 
 		it('Returns multiple example, between backticks.', function() {
 			var data = ['test001', 'test002'];
+			var stub = sinon.stub(command, "addExampleResponse");
+			stub.returns("exampleResponse");
 
-			assert.equal(command.createExamplesResponse(data), "Example: `test001`\nExample: `test002`\n");
+			assert.equal(command.createExamplesResponse(data), "exampleResponse\nexampleResponse\n");
 		});
 	});
 
@@ -175,11 +181,11 @@ describe('Help Command test', function() {
 			}, Error, 'Username must be provided.');
 		});
 
-		it.only('Returns full signup response', function() {
+		it('Returns full signup response', function() {
 			var username = 'testUser001';
 			var stub = sinon.stub(command, "getCommandResponse");
 			stub.returns("testCmdResponse");
-			var expected = "Hi testUser001, my name is luncio. I can help you and your friends \
+			var expectedText = "Hi @testUser001, my name is luncio. I can help you and your friends \
 	        find the place for lunch that everyone will enjoy. Get started by adding your favorite \
 	        restaurants to your profile using: \n*testCmdResponse* \nYou can also \
 	        tell me the restaurants you don't like so I can start to learn more about your food \
@@ -189,9 +195,11 @@ describe('Help Command test', function() {
 	        ask using: \n*testCmdResponse* \nWhen it's time to go to lunch I can help you \
 	        invite your friends using: \n*testCmdResponse* \nQuestions? Just type */lunchio* in \
 	        the message bar and see a list of everything I can do. \nHappy lunching!";
-	        expected = expected.replace(/\t/g,'');
+	        expected = {
+	        	"text": expectedText.replace(/\t/g,'')
+	        };
 
-	        assert.equal(command.getSignupResponse(username), expected);
+	        assert.deepEqual(command.getSignupResponse(username), expected);
 		});
 	});
 });

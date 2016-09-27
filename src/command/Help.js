@@ -103,7 +103,7 @@ module.exports = BaseCmd.extend({
             throw new Error('Username must be provided.');
         }
 
-        var response = _.template("Hi <%= username %>, my name is luncio. I can help you and your friends \
+        var response = _.template("Hi @<%= username %>, my name is luncio. I can help you and your friends \
         find the place for lunch that everyone will enjoy. Get started by adding your favorite \
         restaurants to your profile using: \n*<%= addCmd %>* \nYou can also \
         tell me the restaurants you don't like so I can start to learn more about your food \
@@ -122,7 +122,9 @@ module.exports = BaseCmd.extend({
             helpCmd: '/lunchio'
         };
 
-        return response(data);
+        return {
+            "text": response(data)
+        };
     },
 
     /**
@@ -172,8 +174,8 @@ module.exports = BaseCmd.extend({
 
     /**
      * Returns reponse of all examples
-     * @param  {[type]} examples [description]
-     * @return {[type]}          [description]
+     * @param  {Array} examples Array of example Strings.
+     * @return {String}          Concatenation of all examples, with markup.
      */
     createExamplesResponse: function(examples) {
         var self = this;
