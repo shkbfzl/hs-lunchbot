@@ -45,13 +45,13 @@ describe('CommandResponse', function(){
 
         resp.onSend(function(data){
 
-            var at1 = data.attachements[0].text;
-            var at2 = data.attachements[1].text;
+            var at1 = data.attachments[0].text;
+            var at2 = data.attachments[1].text;
 
             log.info("callback data: ", data);
             assert.isTrue(data.text == 'cool');
             assert.isTrue(data.response_type == 'in_channel');
-                assert.isTrue(data.attachements.length == 2);
+                assert.isTrue(data.attachments.length == 2);
 
             assert.isTrue(at1 == 'mango');
             assert.isTrue(at2 == 'sushi');
