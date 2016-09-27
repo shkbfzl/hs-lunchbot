@@ -3,28 +3,23 @@
 //
 
 require('rootpath')();
-
-var NLPEngine = require('src/NLPEngine.js');
 var log = require('log4js').getLogger('Lamda');
+var NLPEngine = require('src/NLPEngine.js');
 var nlpMapping = require('src/NLPMapping.js');
 var qs = require('qs');
 var Obj = require("object-path");
-
+var config = require('config');
+var _ = require('underscore');
 
 exports.handler = function (event, context, callback) {
 
     log.debug("----- BOT RUN -----");
     log.debug("Event= ", event);
     log.debug("Context= ", context);
+    log.debug("Default Env= ", process.env);
 
-    /**
-     * FIX THIS after release!!!!
-     */
-    if (Obj.has(context, 'awsRequestId')){
-        log.debug("Changing environment to 'prod'")
-        process.env['LUNCHIO_ENV'] = 'prod';
-    }
-    require('config');
+
+    log.debug("Running config= ", config);
 
     // We need this fix query string by AWS gateway
     event = (typeof event == "string")? qs.parse(event) : event;

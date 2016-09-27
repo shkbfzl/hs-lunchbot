@@ -65,6 +65,9 @@ module.exports = Class.extend({}, {
 
         this.getById(key,function(err, data){
 
+            if (err) {
+                log.error(err);
+            }
             var bool = (data.Item)? true: false;
             log.debug("Key exists ="+bool+", Error=", err, ", Data=", data);
             callback(bool, data);

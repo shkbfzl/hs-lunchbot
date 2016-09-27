@@ -9,6 +9,16 @@ var log = require("log4js").getLogger("config"),
     env = process.env.LUNCHIO_ENV
     ;
 
+/**
+ * -------------------------------
+ * FIX THIS after release!!!!
+ */
+if (process.env.LAMBDA_TASK_ROOT) {
+    log.debug("Code running inside lambda switching to 'prod' env");
+    env = 'prod';
+}
+//--------------------------------
+
 log.debug("Loading default config file");
 config = require(__dirname+"/default");
 
