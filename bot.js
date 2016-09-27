@@ -13,16 +13,18 @@ var Obj = require("object-path");
 
 exports.handler = function (event, context, callback) {
 
+    log.debug("----- BOT RUN -----");
+    log.debug("Event= ", event);
+    log.debug("Context= ", context);
+
     /**
      * FIX THIS after release!!!!
      */
     if (Obj.has(context, 'awsRequestId')){
-        process.env.LUNCHIO_ENV = 'production';
+        log.debug("Changing environment to 'prod'")
+        process.env['LUNCHIO_ENV'] = 'prod';
     }
-
-    log.debug("----- BOT RUN -----");
-    log.debug("Event= ", event);
-    log.debug("Context= ", context);
+    require('config');
 
     // We need this fix query string by AWS gateway
     event = (typeof event == "string")? qs.parse(event) : event;
