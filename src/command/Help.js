@@ -90,6 +90,42 @@ module.exports = BaseCmd.extend({
     },
 
     /**
+     * Returns the initial help response when a user
+     * creates a profile with lunchio.
+     *
+     * Requires a username to address the user directly.
+     * 
+     * @param  {String} username Slack username.
+     * @return {String}          Signup response.
+     */
+    getSignupResponse: function(username) {
+        if (!username) {
+            throw new Error('Username must be provided.');
+        }
+
+        var response = _.template("Hi <%= username %>, my name is luncio. I can help you and your friends \
+        find the place for lunch that everyone will enjoy. Get started by adding your favorite \
+        restaurants to your profile using: \n*<%= addCmd %>* \nYou can also \
+        tell me the restaurants you don't like so I can start to learn more about your food \
+        preferences and only recommend the places you'll enjoy most. I call these your banned \
+        restaurants. Add restaurants to your banned list using: \n*<%= banCmd %>* \n\
+        If you ever want to see what restaurants you've favorited and what you've banned just \
+        ask using: \n*<%= myListCmd %>* \nWhen it's time to go to lunch I can help you \
+        invite your friends using: \n*<%= inviteCmd %>* \nQuestions? Just type *<%= helpCmd %>* in \
+        the message bar and see a list of everything I can do. \nHappy lunching!");
+        var data = {
+            username: username,
+            addCmd: this.getCommandResponse('add place'),
+            banCmd: this.getCommandResponse('ban'),
+            myListCmd: this.getCommandResponse("what's on my list"),
+            inviteCmd: this.getCommandResponse('invite'),
+            helpCmd: '/lunchio'
+        };
+
+        return response(data);
+    },
+
+    /**
      * Retrieves the help response for a specific command.
      *
      * Throws an error if given command cannot be found.

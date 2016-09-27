@@ -5,6 +5,7 @@
 require('rootpath')();
 
 var assert = require('chai').assert;
+var sinon = require('sinon');
 var HelpCommand = require('src/command/Help');
 var config = require('config/config.help.command.json');
 
@@ -162,6 +163,35 @@ describe('Help Command test', function() {
 			];
 
 			assert.deepEqual(command.getOutput(), expected);
+		});
+	});
+
+	describe('Tests for getSignupResponse', function() {
+		it('Returns error if no username is provided', function() {
+			var username = null;
+
+			assert.throws(function() {
+				command.getSignupResponse(username);
+			}, Error, 'Username must be provided.');
+		});
+
+		it.only('Returns full signup response', function() {
+			var username = 'testUser001';
+			var stub = sinon.stub(command, "getCommandResponse");
+			stub.returns("testCmdResponse");
+			var expected = "Hi testUser001, my name is luncio. I can help you and your friends \
+	        find the place for lunch that everyone will enjoy. Get started by adding your favorite \
+	        restaurants to your profile using: \n*testCmdResponse* \nYou can also \
+	        tell me the restaurants you don't like so I can start to learn more about your food \
+	        preferences and only recommend the places you'll enjoy most. I call these your banned \
+	        restaurants. Add restaurants to your banned list using: \n*testCmdResponse* \n\
+	        If you ever want to see what restaurants you've favorited and what you've banned just \
+	        ask using: \n*testCmdResponse* \nWhen it's time to go to lunch I can help you \
+	        invite your friends using: \n*testCmdResponse* \nQuestions? Just type */lunchio* in \
+	        the message bar and see a list of everything I can do. \nHappy lunching!";
+	        expected = expected.replace(/\t/g,'');
+
+	        assert.equal(command.getSignupResponse(username), expected);
 		});
 	});
 });
