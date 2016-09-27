@@ -18,6 +18,9 @@ module.exports = BaseParser.extend({
         var restaurant = null,
             regs = [
                 /add\s+place\s+(.*)+$/i,
+                /i\s+like\s+(.*)+$/i,
+                /i\s+have\s+always\s+liked?\s+(.*)+$/i,
+                /i\s+love\s+(.*)+$/i,
                 /remove\s+place\s+(.*)+$/i,
                 /ban\s+(.*)+/i,
                 /remove\s+ban\s+(.*)+/i

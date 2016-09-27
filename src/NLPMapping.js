@@ -34,9 +34,17 @@ module.exports = {
             "what’s\\s+on\\s+my\\+list",
         ],
     },
-
+    //--------- Add favorite ------------
+    'AddRestaurant': {
+        parsers: ['RestaurantName'],
+        langs: [
+            "I\\s+love\\s+\\w+",
+            "I\\s+like\\s+\\w+",
+            "I\\s+have\\s+always\\s+liked?\\s+\\w+"
+        ],
+    },
     'RemoveRestaurant': {
-        parser: ['RestaurantName'],
+        parsers: ['RestaurantName'],
         langs: [
             "remove\\s+place\\s+.+",
         ],
@@ -44,14 +52,14 @@ module.exports = {
 
     //--------- Banned ------------
     'AddBan': {
-        parser: ['RestaurantName'],
+        parsers: ['RestaurantName'],
         langs: [
             "add\\s+ban\\s+.+",
         ],
     },
 
     'RemoveBan': {
-        parser: ['RestaurantName'],
+        parsers: ['RestaurantName'],
         langs: [
             "remove\\s+ban\\s+.+",
         ],
