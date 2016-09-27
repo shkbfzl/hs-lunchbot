@@ -9,7 +9,10 @@ var createTableCommand = require('../commands/create-table-command');
 var addUserCommand = require('../commands/add-user-command');
 var updateUserCommand = require('../commands/update-user-command');
 var deleteUserCommand = require('../commands/delete-user-command');
-
+var createSessionCommand = require('../commands/create-session-command');
+var writeSessionCommand = require('../commands/write-session-command');
+var getSessionCommand = require('../commands/get-session-command');
+var sessionId = "12345";
 
 AWS.config.loadFromPath('../server/config.json')
 AWS.config.update({
@@ -56,13 +59,31 @@ LunchBot.prototype.run = function () {
  */
 LunchBot.prototype._onStart = function () {
     //this._createTable();
-    this._firstRunCheck();
+    //this._firstRunCheck();
+   //this._createSession();
+   // this._writeSession()
+    this._getSession();
 };
 
-LunchBot.prototype._createTable= function () {
+LunchBot.prototype._createTable = function () {
+    console.log('create a table');
     createTableCommand.execute();
 }
 
+LunchBot.prototype._createSession = function () {
+    console.log('create a session');
+    createSessionCommand.execute();
+}
+
+LunchBot.prototype._writeSession = function () {
+    console.log('write a session');
+    writeSessionCommand.execute();
+}
+
+LunchBot.prototype._getSession = function() {
+       console.log('get session data');
+       getSessionCommand.execute(sessionId);
+};
 
 /**
  * Check if the first time the bot is run. It's used to send a welcome message into the channel
@@ -86,7 +107,6 @@ LunchBot.prototype._firstRunCheck = function () {
 
         // if user does not have any records
         if (data = {}) {
-             self._welcomeMessage();
              console.log('adding the user');
              addUserCommand.execute();            
         }
@@ -97,13 +117,5 @@ LunchBot.prototype._firstRunCheck = function () {
     });
 };
 
-/**
- * Sends a welcome message in the channel
- * @private
- */
-LunchBot.prototype._welcomeMessage = function () {
-    //this.postMessageToChannel(this.channels[0].name, 'Hello, Welcome to LunchBot',
-        //{as_user: true});
-};
 
 module.exports = LunchBot;
