@@ -12,6 +12,7 @@ var BaseModel = require('src/model/dynamodb/Base');
 var shortid = require('shortid');
 var pjson = require('src/util/pretty_json');
 var Obj = require("object-path");
+var trimlow = require('src/util/trimlow_text.js');
 
 var table = "Users";
 
@@ -68,8 +69,7 @@ module.exports = BaseModel.extend({}, {
             _.each(restaurantList, function(restaurant) {
 
                 // Prevent empty restaurant name input
-                restaurant = restaurant || "";
-                restaurant = restaurant.trim().toLowerCase();
+                restaurant = trimlow(restaurant);
 
                 if (restaurant.length == 0){
                     return;
