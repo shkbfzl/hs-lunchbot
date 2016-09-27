@@ -8,9 +8,18 @@ var NLPEngine = require('src/NLPEngine.js');
 var log = require('log4js').getLogger('Lamda');
 var nlpMapping = require('src/NLPMapping.js');
 var qs = require('qs');
+var Obj = require("object-path");
 
 
 exports.handler = function (event, context, callback) {
+
+    /**
+     * FIX THIS after release!!!!
+     */
+    if (Obj.has(context, 'awsRequestId')){
+        process.env.LUNCHIO_ENV = 'production';
+    }
+
     log.debug("----- BOT RUN -----");
     log.debug("Event= ", event);
     log.debug("Context= ", context);

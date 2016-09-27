@@ -11,5 +11,6 @@ module.exports = {
         key: "fakeAccessKey",
         secret: "fakeSecretAccessKey",
         region: 'fakeRegion', // Use fake region for local DynamoDB instance
-    }
+    },
+
 }

@@ -10,13 +10,19 @@ var Config = require('config');
 log.debug("Creating Dynamodb connection");
 
 
-var AWS = require('aws-sdk')
-var connection =
-    new AWS.DynamoDB({
-        endpoint: new AWS.Endpoint(Config.dynamedb.host),
-        accessKeyId: Config.dynamedb.key,
-        secretAccessKey: Config.dynamedb.secret,
-        region: Config.dynamedb.region,
-    });
+var AWS = require('aws-sdk');
+
+var params = {
+    endpoint: new AWS.Endpoint(Config.dynamedb.host),
+    accessKeyId: Config.dynamedb.key,
+    secretAccessKey: Config.dynamedb.secret,
+    region: Config.dynamedb.region,
+};
+
+if (Config.env == 'production'){
+    delete params.endpoint;
+}
+
+var connection = new AWS.DynamoDB(params);
 
 module.exports = connection;
