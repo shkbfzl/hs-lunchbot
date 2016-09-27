@@ -15,7 +15,8 @@ module.exports = {
     },
     'Help': {
         langs: [
-            "help"
+            "help",
+            "\\?",
         ]
     },
 
@@ -72,4 +73,13 @@ module.exports = {
             "invite\\s+.+",
         ],
     },
+
+    //--------- Joke ------------
+    'FoodJoke': {
+        langs: [
+            "\\?{2,}",
+            "what\\s*\\?*",
+        ],
+    },
+
 };
