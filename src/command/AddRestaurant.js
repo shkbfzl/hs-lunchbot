@@ -19,7 +19,12 @@ module.exports = BaseCmd.extend({
 
     run: function() {
 
-        this.response.send("Hello, are you hungry?");
+        var restaurant= this.options.place;
+
+        var text =
+            "Greate choice. I added `"+
+            restaurant+"` to your favorites.";
+        this.response.send(text);
     }
 });
 

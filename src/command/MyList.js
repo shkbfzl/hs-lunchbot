@@ -19,7 +19,24 @@ module.exports = BaseCmd.extend({
 
     run: function() {
 
-        this.response.send("Hello, are you hungry?");
+        this.response
+            .addAttachment({
+                title: "Favorite places.",
+                mrkdwn_in: [
+                    "text"
+                ],
+                text: "- Cosi\n- Pizza\n- Al's",
+            })
+            .addAttachment({
+                title: "Banned places.",
+                mrkdwn_in: [
+                    "text"
+                ],
+                text: "- Golden Sushi\n- Burito express\n- White rite",
+            })
+            .send("Lunch.io is a tool that can" +
+                " help your team choose a lunch " +
+                "destination faster.");
     }
 });
 

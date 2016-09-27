@@ -19,13 +19,14 @@ module.exports = BaseCmd.extend({
 
     run: function() {
 
-        var texts = [
-            "I don't like that place too much either.",
-            "I feel the same."
+        var jokes = [
+            'A cold Mexican lunch is a buurrrrrito and chilli.',
+            'Spaghetti is the smartest food because it always uses it’s noodle.'
         ];
-        var randId= _.random(0, 1);
 
-        this.response.send(texts[randId]);
+        var randId = _.random(0, jokes.length - 1);
+
+        this.response.send(jokes[randId]);
     }
 });
 

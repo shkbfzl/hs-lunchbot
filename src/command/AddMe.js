@@ -49,7 +49,7 @@ module.exports = BaseCmd.extend({
                 var user = User.normalizeItem(data.Item);
                 var msg =
                     "Hello "+user.Name+", I already"
-                    +" know you.\nTotaly not creepy :D";
+                    +" know you.\nTotally not creepy :smile:";
                 self.response.send(msg);
                 return;
             }
