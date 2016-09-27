@@ -39,7 +39,7 @@ module.exports = Class.extend({}, {
 
     deleteById: function(ID, callback){
 
-        clientDB.deleteItem({
+        this.DB.deleteItem({
             TableName: this.table,
             Key: {
                 Id: {S: ID}
@@ -57,18 +57,19 @@ module.exports = Class.extend({}, {
             Key: {
                 Id: {S: ID}
             },
-        }, function(err, data){
+        }, callback);
+    },
 
-            callback = callback || function(){};
+    keyExists: function(key, callback) {
 
-            if (err) {
-                callback(err, data);
-                return;
-            }
-            console.log(data);
-            var obj  = self.normalizeItem(data.Item);
-            callback(err, obj);
+        callback = callback || _.noop();
+
+        this.getById(key,function(err, data){
+
+            var bool = (data.Item)? true: false;
+            callback(bool);
         });
+
     },
 
     normalizeItems: function(items){

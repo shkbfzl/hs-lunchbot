@@ -10,12 +10,14 @@ var User  = require('src/model/dynamodb/User.js');
 var Client = require('src/model/dynamodb/Client.js');
 var Promise = require('node-promise').Promise;
 var All = require('node-promise').all;
+var _ = require('underscore');
+var pjson = require('src/util/pretty_json');
 
 describe('Users model', function(){
 
-    var uID = "user100";
+    var uID = "user1";
 
-    describe('Add/Update/Delete User', function(){
+    describe('CRUD on User', function(){
 
         it('Delete user', function(done) {
 
@@ -26,11 +28,29 @@ describe('Users model', function(){
             });
         });
 
+        it("Key doesn't exist", function(done) {
+
+            User.keyExists(uID , function(bool) {
+                log.info(" Bool = ", bool);
+                assert.isTrue(!bool);
+                done();
+            });
+        });
+
         it('Create user', function(done) {
 
-            User.setName(uID , "Mike", function(err, data) {
+            User.create(uID , "Mike", function(err, data) {
                 log.info("Error= ", err, ", Data = ", data);
                 assert.isTrue(!err);
+                done();
+            });
+        });
+
+        it("Key exist", function(done) {
+
+            User.keyExists(uID , function(bool) {
+                log.info(" Bool = ", bool);
+                assert.isTrue(bool);
                 done();
             });
         });
@@ -38,6 +58,9 @@ describe('Users model', function(){
         it('Get user', function(done) {
 
             User.getById(uID, function(err, data) {
+
+                data = User.normalizeItem(data.Item);
+
                 log.info("Error= ", err, ", Data = ", data);
                 assert.isTrue(data.Id == uID);
                 done();
@@ -61,14 +84,14 @@ describe('Users model', function(){
 
         });
 
-        it('Add users', function(done) {
+        it('Create users', function(done) {
             var id100= "user100";
             var id200= "user200";
             var p1 = new Promise();
             var p2 = new Promise();
 
-            User.setName(id100, "Sun", function(){ p1.resolve() });
-            User.setName(id200, "Moon", function(){ p2.resolve() });
+            User.create(id100, "Sun", function(){ p1.resolve() });
+            User.create(id200, "Moon", function(){ p2.resolve() });
 
             All([p1,p2])
                 .then(function(){
@@ -79,18 +102,48 @@ describe('Users model', function(){
 
         it('Get All users', function(done) {
 
-            User.getAll(function(err, lists){
+            User.getAll(function(err, list){
 
-                log.info("Users= ", lists);
-                assert.isTrue(lists.length == 3);
+                log.info("Users= ", list);
+                var ulists = [];
+                _.each(list, function(item) {
+                    ulists.push(item.Id);
+                });
+
+                _.contains(ulists, "user100");
+                _.contains(ulists, "user200");
                 done();
             });
         });
 
+        it('Add Golden sushi restaurant', function(done) {
+
+            User.addPlace(uID , "Golden Sushi", function(err, data) {
+                log.info("Error= ", err, ", Data = ", pjson(data));
+                assert.isTrue(!err);
+                assert.isTrue(_.keys(data.Attributes.Places.M).length == 1);
+                done();
+            });
+        });
+
+        it('Add Nice Burger restaurant', function(done) {
+
+            User.addPlace(uID , "Nice Burger", function(err, data) {
+                log.info("Error= ", err, ", Data = ", pjson(data));
+                assert.isTrue(!err);
+                assert.isTrue(_.keys(data.Attributes.Places.M).length == 2);
+                done();
+            });
+        });
+
+        it('Remove restaurant', function(done) {
+
+            User.removeByPlaceName(uID , "nice BuRger", function(err, data) {
+                log.info("Error= ", err, ", Data = ", pjson(data));
+                assert.isTrue(!err);
+                assert.isTrue(_.keys(data.Attributes.Places.M).length == 1);
+                done();
+            });
+        });
     });
-
-    describe('Add/Update/Delete User restaurants', function(done){
-
-    });
-
 });
