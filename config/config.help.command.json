@@ -29,7 +29,7 @@
 			"syntax": "/lunchio remove ban [restaurant]",
 			"description": "Removes a restaurant from your banned list.",
 			"examples": [
-				"/lunchio ban Potbelly"
+				"/lunchio remove ban Potbelly"
 			]
 		},
 		{
