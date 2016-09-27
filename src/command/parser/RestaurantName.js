@@ -23,7 +23,10 @@ module.exports = BaseParser.extend({
                 /i\s+love\s+(.*)+$/i,
                 /remove\s+place\s+(.*)+$/i,
                 /ban\s+(.*)+/i,
-                /remove\s+ban\s+(.*)+/i
+                /remove\s+ban\s+(.*)+/i,
+                /I\s+hate\\s+(.*)+/i,
+                /I\s+don'?\s?t\s+like\s+(.*)+/i,
+                /I\s+never\s+go\s?to\s+(.*)+/i,
             ]
             ;
 
