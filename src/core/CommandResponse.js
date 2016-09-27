@@ -15,12 +15,12 @@ module.exports = Class.extend({
     // Private properties
     _defr: null,
     _text: '',
-    _attachements:[],
+    _attachments:[],
 
     public: false,
 
     initialize: function() {
-        this.__attachements = [];
+        this.__attachments = [];
     },
 
     addAttachment: function(attement){
@@ -29,7 +29,7 @@ module.exports = Class.extend({
             return this;
         }
 
-        this._attachements.push(attement);
+        this._attachments.push(attement);
 
         return this;
     },
@@ -51,8 +51,8 @@ module.exports = Class.extend({
             text: text,
         };
 
-        if (!_.isEmpty(this._attachements)) {
-            data.attachements = this._attachements;
+        if (!_.isEmpty(this._attachments)) {
+            data.attachments = this._attachments;
         }
 
         if (this.public) {
@@ -71,7 +71,7 @@ module.exports = Class.extend({
     toString: function(){
         var map = {
             public: this.public,
-            attachements: this.attachements,
+            attachments: this.attachments,
         };
         return pretty_json(map);
     }
