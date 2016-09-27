@@ -32,7 +32,8 @@ module.exports = {
     'MyList': {
         langs: [
             "show\\s+my\\s+list",
-            "what’s\\s+on\\s+my\\+list",
+            "my\\s+list",
+            "what’*s\\s+on\\s+my\\s+list\\s*\\?*",
         ],
     },
     //--------- Add favorite ------------
