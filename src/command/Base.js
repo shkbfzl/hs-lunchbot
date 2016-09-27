@@ -8,6 +8,9 @@ var Class = require('backbone-class');
 var prettyjson = require('src/util/pretty_json.js');
 var CmdResponse = require('src/core/CommandResponse.js');
 var deferred = require('node-promise').defer;
+var _ = require('underscore');
+var User = require('src/model/dynamodb/User.js');
+var Obj = require("object-path");
 
 module.exports = Class.extend({
 
@@ -26,6 +29,26 @@ module.exports = Class.extend({
         this.response = new CmdResponse();
         this.response.onSend(function(data){
             self._defr.resolve(data);
+        });
+    },
+
+    checkUser: function(callback){
+
+        callback = callback || _.noop();
+        var uId = this.options.user_id;
+        var self  = this;
+
+        User.keyExists(uId, function(bool, data){
+
+            data = User.normalizeItem((data)? data.Item: null);
+
+            if (bool) {
+                callback(data);
+                return;
+            }
+
+            var msg = "Hmm, I don't know you yet. Add yourself to my list.";
+            self.response.send(msg);
         });
     },
 

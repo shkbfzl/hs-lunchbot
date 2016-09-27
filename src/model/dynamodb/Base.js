@@ -50,8 +50,6 @@ module.exports = Class.extend({}, {
 
     getById: function(ID, callback) {
 
-        var self = this;
-
         this.DB.getItem({
             TableName: this.table,
             Key: {
@@ -63,11 +61,13 @@ module.exports = Class.extend({}, {
     keyExists: function(key, callback) {
 
         callback = callback || _.noop();
+        var self = this;
 
         this.getById(key,function(err, data){
 
             var bool = (data.Item)? true: false;
-            callback(bool);
+            log.debug("Key exists ="+bool+", Error=", err, ", Data=", data);
+            callback(bool, data);
         });
 
     },
