@@ -12,6 +12,7 @@ var Promise = require('node-promise').Promise;
 var All = require('node-promise').all;
 var _ = require('underscore');
 var pjson = require('src/util/pretty_json');
+var UnkwnRestaurantError = require('src/error/UnknowRestaurantError.js');
 
 describe('Users model', function(){
 
@@ -116,6 +117,7 @@ describe('Users model', function(){
             });
         });
 
+        //---------------- RESTAURANTS ----------------
         it('Add Golden sushi restaurant', function(done) {
 
             User.addPlace(uID , "Golden Sushi", function(err, data) {
@@ -145,5 +147,56 @@ describe('Users model', function(){
                 done();
             });
         });
+
+        //---------------- BANNED LIST ----------------
+        it('Add Lite mirror restaurant', function(done) {
+
+            User.addPlace(uID , "Lite  Mirror", function(err, data) {
+                log.info("Error= ", err, ", Data = ", pjson(data));
+                assert.isTrue(!err);
+                assert.isTrue(_.keys(data.Attributes.Places.M).length == 2);
+                done();
+            });
+        });
+
+        it("Ban wrong restaurant", function(done) {
+
+            User.addToBannedList(uID , "Gold sushi", function(err, data) {
+                log.info("Error= ", err, ", Data = ", pjson(data));
+                assert.isTrue(err instanceof UnkwnRestaurantError);
+                done();
+            });
+        });
+
+        it("Ban 'Gold sushi' restaurant", function(done) {
+
+            User.addToBannedList(uID , "GoLden sushi", function(err, data) {
+                log.info("Error= ", err, ", Data = ", pjson(data));
+                assert.isTrue(!err);
+                assert.isTrue(data.Attributes.Banned.SS.length == 1);
+                done();
+            });
+        });
+
+        it("Ban 'Lite mirror ' restaurant", function(done) {
+
+            User.addToBannedList(uID , "Lite mirror ", function(err, data) {
+                log.info("Error= ", err, ", Data = ", pjson(data));
+                assert.isTrue(!err);
+                assert.isTrue(data.Attributes.Banned.SS.length == 2);
+                done();
+            });
+        });
+
+        it("Remove 'GoLden sushi' restaurant", function(done) {
+
+            User.removeFromBannedList(uID , "GoLden sushi", function(err, data) {
+                log.info("Error= ", err, ", Data = ", pjson(data));
+                assert.isTrue(!err);
+                assert.isTrue(data.Attributes.Banned.SS.length == 1);
+                done();
+            });
+        });
+
     });
 });
