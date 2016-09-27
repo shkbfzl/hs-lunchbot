@@ -13,14 +13,13 @@ var _ = require('underscore');
 module.exports = Class.extend({
 
     // Private properties
-    _defr: null,
-    _text: '',
     _attachments:[],
 
     public: false,
 
     initialize: function() {
-        this.__attachments = [];
+        this._super();
+        this._attachments = [];
     },
 
     addAttachment: function(attement){
