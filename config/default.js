@@ -13,4 +13,7 @@ module.exports = {
         region: 'fakeRegion', // Use fake region for local DynamoDB instance
     },
 
+    slack: {
+    	api_token: 'fakeAPIToken'
+    },
 }
