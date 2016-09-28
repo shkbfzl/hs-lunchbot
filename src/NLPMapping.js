@@ -40,9 +40,9 @@ module.exports = {
     'AddRestaurant': {
         parsers: ['RestaurantName'],
         langs: [
-            "I\\s+love\\s+\\w+",
-            "I\\s+like\\s+\\w+",
-            "I\\s+have\\s+always\\s+liked?\\s+\\w+"
+            "I\\s+love\\s+.+",
+            "I\\s+like\\s+.+",
+            "I\\s+have\\s+always\\s+liked?\\s+.+"
         ],
     },
     'RemoveRestaurant': {
@@ -56,10 +56,11 @@ module.exports = {
     'AddBan': {
         parsers: ['RestaurantName'],
         langs: [
-            "add\\s+ban\\s+\\w+",
-            "I\\s+hate\\s+\\w+",
-            "I\\s+don'?\\s*t\\s+like\\s+\\w+",
-            "I\\s+never\\s+go\\s?to\\s+\\w+",
+            "add\\s+ban\\s+.+",
+            "add\\s+to\\s+my\\s+ban\\s+list.+",
+            "I\\s+hate\\s+.+",
+            "I\\s+don'?\\s*t\\s+like\\s+.+",
+            "I\\s+never\\s+go\\s?to\\s+.+",
         ],
     },
 

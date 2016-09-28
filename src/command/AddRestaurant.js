@@ -22,7 +22,7 @@ module.exports = BaseCmd.extend({
         var restaurant= this.options.place;
 
         var text =
-            "Greate choice. I added `"+
+            "Great choice. I added `"+
             restaurant+"` to your favorites.";
         this.response.send(text);
     }

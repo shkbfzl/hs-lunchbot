@@ -32,7 +32,7 @@ module.exports = BaseCmd.extend({
                 mrkdwn_in: [
                     "text"
                 ],
-                text: "- Chipotle\n- Genes\n- White rite",
+                text: "- Chipotle\n- Genes\n- Archies",
             })
             .send("Here is your list.");
     }
