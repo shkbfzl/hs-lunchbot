@@ -45,8 +45,19 @@ module.exports = BaseCmd.extend({
     initialize: function(){
         this._super();
     },
-
     run: function() {
+
+        var texts = [
+            'That’s a solid crew you’ve assembled there.',
+            'I sent your invitation.'
+        ];
+
+        var randId = _.random(0,1);
+        this.response.send(texts[randId]);
+
+    },
+
+    runOld: function() {
         var slackUsers = [];
         var channelName = getChannelName();
         var slack = getSlack();

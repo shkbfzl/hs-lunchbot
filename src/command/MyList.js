@@ -25,18 +25,16 @@ module.exports = BaseCmd.extend({
                 mrkdwn_in: [
                     "text"
                 ],
-                text: "- Cosi\n- Pizza\n- Al's",
+                text: "- Cosi\n- Monicas\n- Al's pizza",
             })
             .addAttachment({
                 title: "Banned places.",
                 mrkdwn_in: [
                     "text"
                 ],
-                text: "- Golden Sushi\n- Burito express\n- White rite",
+                text: "- Chipotle\n- Genes\n- White rite",
             })
-            .send("Lunch.io is a tool that can" +
-                " help your team choose a lunch " +
-                "destination faster.");
+            .send("Here is your list.");
     }
 });
 

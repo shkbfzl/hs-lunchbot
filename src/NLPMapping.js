@@ -56,7 +56,10 @@ module.exports = {
     'AddBan': {
         parsers: ['RestaurantName'],
         langs: [
-            "add\\s+ban\\s+.+",
+            "add\\s+ban\\s+\\w+",
+            "I\\s+hate\\s+\\w+",
+            "I\\s+don'?\\s?t\\s+like\\s+\\w+",
+            "I\\s+never\\s+go\\s?to\\s+\\w+",
         ],
     },
 
@@ -72,6 +75,14 @@ module.exports = {
         parsers: ['UserName'],
         langs: [
             "invite\\s+.+",
+        ],
+    },
+
+    //--------- Invite ------------
+    'Choice': {
+        parsers: ['RestaurantName'],
+        langs: [
+            "I\\s+want\\s+\\w+",
         ],
     },
 
