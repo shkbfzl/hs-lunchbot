@@ -1,0 +1,62 @@
+{
+	"commands": [
+		{
+			"name": "add place",
+			"syntax": "/lunchio add place [restaurant]",
+			"description": "Add a restaurant to your favorites list.",
+			"examples": [
+				"/lunchio add place Potbelly"
+			]
+		},
+		{
+			"name": "remove",
+			"syntax": "/lunchio remove [restaurant]",
+			"description": "Removes the restaurant from your favorites list.",
+			"examples": [
+				"/lunchio remove Potbelly"
+			]
+		},
+		{
+			"name": "ban",
+			"syntax": "/lunchio ban [restaurant]",
+			"description": "Add a restaurant to your banned list.",
+			"examples": [
+				"/lunchio ban Potbelly"
+			]
+		},
+		{
+			"name": "remove ban",
+			"syntax": "/lunchio remove ban [restaurant]",
+			"description": "Removes a restaurant from your banned list.",
+			"examples": [
+				"/lunchio remove ban Potbelly"
+			]
+		},
+		{
+			"name": "what's on my list",
+			"syntax": "/lunchio what's on my list",
+			"description": "Displays your favorited and banned lists.",
+			"examples": []
+		},
+		{
+			"name": "invite",
+			"syntax": "/lunchio invite @name...",
+			"description": "Invites friends to lunch",
+			"examples": [
+				"/lunchio invite @johnSmith @maryWilson @georgeJohnson"
+			]
+		},
+		{
+			"name": "accept",
+			"syntax": "/lunchio accept",
+			"description": "Accept a lunch invitation.",
+			"examples": []
+		},
+		{
+			"name": "what's for lunch?",
+			"syntax": "/lunchio what's for lunch?",
+			"description": "Generate three suggestions for lunch.",
+			"examples": []
+		}
+	]
+}

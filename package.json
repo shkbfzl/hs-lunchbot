@@ -1,0 +1,42 @@
+{
+  "name": "hs-lunchbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "dependencies": {
+    "async": "^1.5.0",
+    "aws-sdk": "^2.6.3",
+    "backbone-class": "0.0.2",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "extend-error": "0.0.2",
+    "log4js": "^0.6.38",
+    "node-promise": "^0.5.12",
+    "object-path": "^0.11.2",
+    "qs": "^6.2.1",
+    "rootpath": "^0.1.2",
+    "shortid": "^2.2.6",
+    "slack-node": "^0.1.7",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2",
+    "sinon": "^1.17.6"
+  },
+  "scripts": {
+    "test": "mocha --recursive test/specs/",
+    "dev": "node dev-server",
+    "package": "npm install && zip -r build/hs-lunchio.zip * -x *.git* -x *buils* "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shkbfzl/hs-lunchbot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shkbfzl/hs-lunchbot/issues"
+  },
+  "homepage": "https://github.com/shkbfzl/hs-lunchbot#readme"
+}
