@@ -58,7 +58,7 @@ module.exports = {
         langs: [
             "add\\s+ban\\s+\\w+",
             "I\\s+hate\\s+\\w+",
-            "I\\s+don'?\\s?t\\s+like\\s+\\w+",
+            "I\\s+don'?\\s*t\\s+like\\s+\\w+",
             "I\\s+never\\s+go\\s?to\\s+\\w+",
         ],
     },
