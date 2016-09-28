@@ -9,7 +9,7 @@ var async = require('async');
 var BaseCmd = require('src/command/Base.js');
 var Config = require('config');
 var Slack = require('slack-node');
-var User = require('src/model/dynamodb/User.js');
+var Session = require('src/model/dynamodb/Session.js');
 var _ = require('underscore');
 
 var getChannelName = function() {
@@ -103,14 +103,33 @@ module.exports = BaseCmd.extend({
                     cb(null, result);
                 });
             },
-        ], function(err, result) {
-            var texts = [
-                'That’s a solid crew you’ve assembled there.',
-                'I sent your invitation.'
-            ];
+            function(result, cb) {
+                var self = this;
 
-            var randId = _.random(0,1);
-            commandResponseObj.send(texts[randId]);
+                var usersToInviteString = JSON.stringify(usersToInvite);
+                Session.create(result.channel.id, usersToInviteString, function(err, data){
+
+                    if(err){
+                        console.log('Error creating new Session on the database: %j', err);
+                        commandResponseObj.send("Oops, please :(");
+                        return;
+                    }
+                    console.log("Session created= %j", data);
+                    cb(null, 'Success');
+                });
+            }
+        ], function(err, result) {
+            if (err) {
+                commandResponseObj.send('Error sending your invitation.  Please try again');
+            } else {
+                var texts = [
+                    'That’s a solid crew you’ve assembled there.',
+                    'I sent your invitation.'
+                ];
+
+                var randId = _.random(0,1);
+                commandResponseObj.send(texts[randId]);
+            }
         });
     }
 });
