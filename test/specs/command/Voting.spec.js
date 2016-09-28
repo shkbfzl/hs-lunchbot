@@ -152,8 +152,7 @@ describe('Voting Command test', function() {
 
 		it('Returns output with result place inserted', function() {
 			getResultMethodStub.returns("testPlace001");
-			var expected = `Congratulations! Your team has picked a lunch.
-							You will be lunching at testPlace001.`;
+			var expected = 'Congratulations! Your team has picked a lunch. You will be lunching at testPlace001.';
 
 			assert.equal(command.getOutput(), expected);
 		});

@@ -27,8 +27,7 @@ module.exports = BaseCmd.extend({
     },
 
     getOutput: function() {
-    	var template = _.template(`Congratulations! Your team has picked a lunch.
-							You will be lunching at <%= place %>.`);
+    	var template = _.template('Congratulations! Your team has picked a lunch. You will be lunching at <%= place %>.');
     	var place = this.getResult();
 
     	return template({place:place});
