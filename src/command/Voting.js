@@ -7,6 +7,7 @@ require('rootpath')();
 var _ = require('underscore');
 var log = require('log4js').getLogger(__filename);
 var BaseCmd = require('src/command/Base.js');
+var Session = require('src/model/dynamodb/Session.js');
 
 
 module.exports = BaseCmd.extend({
@@ -20,7 +21,9 @@ module.exports = BaseCmd.extend({
 
     run: function() {
 
-        this.response.send("Hello, are you hungry?");
+        var output = this.getOutput();
+
+        this.response.send(output);
     },
 
     getOutput: function() {
@@ -53,8 +56,28 @@ module.exports = BaseCmd.extend({
     	return result;
     },
 
-    getPlaces: function() {},
-    getChoices: function() {},
+    getPlaces: function() {
+        var dummyData = {
+            "1": "Cosi",
+            "2": "Pizza",
+            "3": "Al's"
+        };
+
+        // Add call to session for lunch options
+        
+        return dummyData;
+    },
+    getChoices: function() {
+        var dummyData = [
+            {"user": "user01", "choice": 2},
+            {"user": "user02", "choice": 3},
+            {"user": "user03", "choice": 2}
+        ];
+
+        // Add call to session for user choices
+        
+        return dummyData;
+    },
 
     /**
      * Takes three lunch options and an object containing users' PickNot choices, 
