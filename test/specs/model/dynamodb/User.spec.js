@@ -7,7 +7,7 @@ require('rootpath')();
 var assert = require('chai').assert;
 var log = require('log4js').getLogger('model/dynamodb/User.spec');
 var User  = require('src/model/dynamodb/User.js');
-var Client = require('src/model/dynamodb/Client.js');
+var Client = require('src/core/datasource/DynamodbConnection.js');
 var Promise = require('node-promise').Promise;
 var All = require('node-promise').all;
 var _ = require('underscore');

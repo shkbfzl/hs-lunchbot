@@ -1,4 +1,4 @@
-# HS Lunch Bot
+# Lunchio
 
 
 
@@ -37,6 +37,8 @@ npm run dev
 At the root
 
 ```
+/bin
+  |- lunchio
 /config
   |- index.js
   |- default.js
@@ -44,6 +46,7 @@ At the root
   |- prod.js
 /lib
 /src/
+  |- /app
   |- /command
   |- /core
   |- /error
@@ -54,11 +57,13 @@ At the root
   |- /specs
 ```
 
+- **bin** - Contains executable files
 - **config** - Contains different environment config
 
 - **lib** - Contains external libraries that are not available on NPM
 
 - **src** - Contains all the project classes
+	- **app** - Contains the main application entry
 	- **command** - You new command should be store here (Don't forget to extend **BaseCommand** class)
 	- **core** - Contains core classes
 	- **core** - Contains custom error classes
@@ -86,14 +91,15 @@ The config module always load the `default.js` first then the environment config
 All commands must extend the `src/command/Base.js` or one of his subclass. You override the `run` method with the logic needed.
 ```
 var Hello = Base.extend({
-  run: function(resolve, reject) {
-    resolve("Hi everyone");
+  run: function() {
+    this.response.send("Hi everyone");
   }
 })
 ```
 
-####Run method
-The code for your command class is implemented inside the `run` method. The method has two callbacks `resolve` and `reject`. After your code execution, you invoke one of these callbacks, resolve for success and reject for error.
+#### Run method
+
+The code for your command class is implemented inside the `run` method. The method takes no argument. Each command has a new `CommandResponse` instance attached to the `response` property. Look at the `CommandResponse` api.
 
 Example:
 ```
@@ -101,14 +107,14 @@ var cmd = Base.LunchTimeCommand({
   name: 'greeting',
   description: "Always nice",
 
-  run: function(resolve, reject) {
+  run: function() {
     // ... more core
-    resolve('Hi, are you hungry?');
+    this.response.send('Hi, are you hungry?');
   }
 })
 ```
 
-####Command options
+#### Command options
 A command may accept `options` that can be use by your code.
 Example:
 ```
@@ -116,7 +122,7 @@ Example:
 var cmd = new GreetingCommand({ lang: 'french' });
 
 # Inside the GreetingCommand run function
-run: function(resolve, reject) {
+run: function() {
 
   var text = 'Hi';
 
@@ -127,11 +133,11 @@ run: function(resolve, reject) {
       text = '¡Hola';
   }
 
-  resolve(text);
+  this.response.send(text);
 }
 ```
 
-#####Slack command paramters
+##### Slack command paramters
 Whenever user types the custom command /lunchio , slack posts a lot of parameters to Lambda function which are handled by the NLPEngine then forward to your command.
 
 Example:
@@ -152,7 +158,7 @@ For more information about [slack commands](https://api.slack.com/slash-commands
 
 Inside your command theses parameters are available in `options` as well
 
-##Dev server<a name=""devserver"></a>
+## CommandResponse
 
 ```
 WOKRING ON THIS

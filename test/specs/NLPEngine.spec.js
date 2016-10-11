@@ -8,7 +8,7 @@ var assert = require('chai').assert;
 var NLPRouteIndexError = require('src/error/NLPMappingIndexError.js');
 var NLPNotMatchError = require('src/error/NLPNotMatchError.js');
 var log = require('log4js').getLogger('NLPEngine.spec');
-var Engine = require('src/NLPEngine.js');
+var Engine = require('src/nlp/NLPEngine.js');
 var CmdDescriptor = require('src/core/CommandDescriptor.js');
 
 var dummyRoute = {

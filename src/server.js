@@ -7,8 +7,9 @@ require('rootpath')();
 var log = require('log4js').getLogger('dev-server');
 var BodyParser  = require('body-parser');
 var server = require('express')();
+var Config = require('config');
 var Bot = require('bot');
-const PORT = 50151;
+const PORT = Config.get('server.port');
 
 //
 server.use(BodyParser.json());
@@ -24,7 +25,7 @@ server.post('/bot', function(req, resp) {
 });
 
 
-log.info("Starting LUNCHIO dev-server");
+log.info("Starting LUNCHIO server");
 log.info("Listing on port: "+PORT);
 
 server.listen(PORT, function(error) {

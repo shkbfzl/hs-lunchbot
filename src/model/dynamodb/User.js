@@ -5,7 +5,7 @@
 
 require('rootpath')();
 
-var clientDB = require('src/model/dynamodb/Client.js');
+var clientDB = require('src/core/datasource/DynamodbConnection.js');
 var log = require('log4js').getLogger(__filename);
 var _ = require('underscore');
 var BaseModel = require('src/model/dynamodb/Base');

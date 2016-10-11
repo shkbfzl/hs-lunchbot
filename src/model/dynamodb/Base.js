@@ -5,7 +5,7 @@
 require('rootpath')();
 
 var log = require('log4js').getLogger(__filename);
-var clientDB = require('src/model/dynamodb/Client.js');
+var clientDB = require('src/core/datasource/DynamodbConnection.js');
 var Class = require('backbone-class');
 var _ = require('underscore');
 var pretty_json = require('src/util/pretty_json.js');
