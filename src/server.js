@@ -8,7 +8,8 @@ var log = require('log4js').getLogger('dev-server');
 var BodyParser  = require('body-parser');
 var server = require('express')();
 var Config = require('config');
-var Bot = require('bot');
+var Bot = require('src/core/Bot');
+var Boot = require('src/app/Boot.js');
 const PORT = Config.get('server.port');
 
 //
@@ -28,14 +29,17 @@ server.post('/bot', function(req, resp) {
 log.info("Starting LUNCHIO server");
 log.info("Listing on port: "+PORT);
 
-server.listen(PORT, function(error) {
+Boot.ready(function(){
 
-    if (error) {
-        log.error("Oops: "+error.message);
-        log.error(error);
-        return;
-    }
+    server.listen(PORT, function(error) {
 
-    log.info("Api available on http://localhost:"+PORT+"/bot");
-    log.info("Server ready ...");
+        if (error) {
+            log.error("Oops: "+error.message);
+            log.error(error);
+            return;
+        }
+
+        log.info("Api available on http://localhost:"+PORT+"/bot");
+        log.info("Server ready ...");
+    });
 });

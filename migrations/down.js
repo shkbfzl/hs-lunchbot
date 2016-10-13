@@ -4,22 +4,44 @@
 
 require('rootpath')();
 
-var DClient = require('src/model/dynamodb/Client.js');
+require('rootpath')();
+
+var Boot = require('src/app/Boot.js');
+var BaseModel = require('src/model/mongodb/Base');
+var async = require('async');
 var log = require('log4js').getLogger(__filename);
 
-var callback = function(err, data){
+var logMsg = function(err){
 
     if (err) {
         log.error(err);
         return;
     }
 
-    log.info("Table deleted");
-    log.info(data);
+    log.info("Table created");
 };
 
-log.info("Deleting 'Users' table");
-DClient.deleteTable({TableName: "Users"}, callback);
+Boot.ready(function(){
 
-log.info("Deleting 'Sessions' table");
-DClient.deleteTable({TableName: "Sessions"}, callback);
+    async.waterfall([
+        function(cb) {
+
+            log.info("Deleting 'Users' table");
+            BaseModel.DB.dropCollection('Users', function(e){
+                logMsg(e);
+                cb(null)
+            });
+        },
+        function(cb) {
+            log.info("Deleting 'Sessions' table");
+            BaseModel.DB.dropCollection('Sessions', function(e){
+                logMsg(e);
+                cb(null)
+            });
+        }
+    ], function(){
+
+        BaseModel.DB.close();
+    })
+});
+

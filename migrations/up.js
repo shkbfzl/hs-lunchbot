@@ -4,10 +4,13 @@
 
 require('rootpath')();
 
-var DClient = require('src/model/dynamodb/Client.js');
+var Boot = require('src/app/Boot.js');
+var BaseModel = require('src/model/mongodb/Base');
 var log = require('log4js').getLogger(__filename);
+var async = require('async');
 
-var callback = function(err, data){
+
+var logMsg = function(err){
 
     if (err) {
         log.error(err);
@@ -15,40 +18,30 @@ var callback = function(err, data){
     }
 
     log.info("Table created");
-    log.info(data);
 };
 
-var userTable = {
-    TableName : "Users",
-    KeySchema: [
-        { AttributeName: "Id", KeyType: "HASH" }
-    ],
-    AttributeDefinitions: [
-        { AttributeName: "Id", AttributeType: "S" }
-    ],
-    ProvisionedThroughput: {
-        ReadCapacityUnits: 1,
-        WriteCapacityUnits: 1
-    }
-};
+Boot.ready(function(){
 
-var sessionTable = {
-    TableName : "Sessions",
-    KeySchema: [
-        { AttributeName: "Id", KeyType: "HASH" }  //Partition key
-    ],
-    AttributeDefinitions: [
-        { AttributeName: "Id", AttributeType: "S" }
-    ],
-    ProvisionedThroughput: {
-        ReadCapacityUnits: 1,
-        WriteCapacityUnits: 1
-    }
-};
+    async.waterfall([
+        function(cb) {
 
-log.info("Creating 'Users' table");
-DClient.createTable(userTable, callback);
+            log.info("Creating 'Users' table");
+            BaseModel.DB.createCollection('Users', function(e){
+                logMsg(e);
+                cb(null)
+            });
+        },
+        function(cb) {
+            log.info("Creating 'Sessions' table");
+            BaseModel.DB.createCollection('Sessions', function(e){
+                logMsg(e);
+                cb(null)
+            });
+        }
+    ], function(){
 
-log.info("Creating 'Sessions' table");
+        BaseModel.DB.close();
+    })
 
-DClient.createTable(sessionTable, callback);
+});
+

@@ -17,9 +17,9 @@ module.exports = {
     },
 
     mongodb: {
-        host: 'http://localhost',
+        host: 'mongodb://localhost',
         port: 27017,
-        databse: 'lunchio'
+        database: 'lunchio'
     },
 
     slack: {

@@ -5,34 +5,49 @@
 require('rootpath')();
 
 var log = require('log4js').getLogger(__filename);
-var clientDB = require('src/core/datasource/MongodbConnection.js');
 var Class = require('backbone-class');
 var _ = require('underscore');
 var pretty_json = require('src/util/pretty_json.js');
 
+var client = null;
+
 module.exports = Class.extend({}, {
 
-    DB: clientDB,
-    collection: null,
+    table: null,
+
+    setDb: function(db) {
+        client = db;
+    },
 
     getAll: function(callback) {
 
-        callback = callback || function(){};
-        var self = this;
+        callback = callback || _.noop;
 
-        this.DB[this.collection].find({}, callback);
+        this.collection().find({}, callback);
+    },
+
+    collection: function () {
+
+        return client.collection(this.table);
     },
 
     deleteById: function(ID, callback){
 
-        this.DB[this.collection].remove({ _id: ID }, callback);
-
+        this.collection().remove({ _id: ID }, callback);
     },
 
     getById: function(ID, callback) {
 
-        this.DB[this.collection]
-            .findOne({ _id: ID }, callback);
+        this.collection().findOne({ _id: ID }, callback);
+    },
+
+    update: function(ID, params, callback) {
+
+        this.collection()
+            .update(
+                { _id: ID },
+                { $set: params },
+                callback);
     },
 
     keyExists: function(key, callback) {

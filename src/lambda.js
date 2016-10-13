@@ -6,7 +6,7 @@ require('rootpath')();
 var log = require('log4js').getLogger('Lamda');
 var qs = require('qs');
 var config = require('config');
-var Bot = require('src/app/Bot');
+var Bot = require('src/core/Bot');
 
 exports.handler = function (event, context, callback) {
 
