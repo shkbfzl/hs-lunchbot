@@ -4,6 +4,7 @@
 var log = require("log4js").getLogger("config"),
     _ = require('underscore'),
     pretty_json = require('../src/util/pretty_json.js'),
+    Obj = require('object-path'),
     config,
     envConfig,
     env = process.env.LUNCHIO_ENV

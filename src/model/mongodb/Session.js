@@ -18,11 +18,14 @@ module.exports = BaseModel.extend({}, {
 
     table: "Sessions",
 
-    create: function(key, userList, callback) {
+    create: function(key, users, callback) {
 
-        this.collection().insert({
-            _id: key,
-            users: userList
+        return clientDB.putItem({
+            TableName: table,
+            Item: {
+                Id: {S: key},
+                Users: {S: users}
+            },
         }, callback);
     },
 

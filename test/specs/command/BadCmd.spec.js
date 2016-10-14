@@ -52,9 +52,9 @@ describe("BadCmd.spec", function (){
 
         var cmd  = new RejectCmd();
         cmd.run();
-        cmd.onDone(function(data){
+        cmd.onDone(function(err, data){
 
-            assert.isTrue(true);
+            assert.isTrue(!err);
             assert.isTrue(data.text == "I'm not happy!!");
             done();
         });

@@ -9,6 +9,8 @@ var pretty_json = require('src/util/pretty_json');
 var log = require('log4js').getLogger(__filename);
 var _ = require('underscore');
 
+const SEND_EVENT = 'send';
+const ERROR_EVENT = 'error';
 
 module.exports = Class.extend({
 
@@ -37,7 +39,12 @@ module.exports = Class.extend({
 
         var data = this.buildResponse(text);
         log.debug("Response data= ", data);
-        this.trigger('send', data);
+        this.trigger(SEND_EVENT, data);
+    },
+
+    error: function(exception){
+
+        this.trigger(ERROR_EVENT, exception);
     },
 
     done:function() {
@@ -63,7 +70,17 @@ module.exports = Class.extend({
 
     onSend: function(callback) {
 
-        this.on('send', callback.bind(this));
+        callback = callback || _.noop;
+
+        this.on(SEND_EVENT, callback.bind(this));
+        return this;
+    },
+
+    onError: function(callback) {
+
+        callback = callback || _.noop;
+
+        this.on(ERROR_EVENT, callback.bind(this));
         return this;
     },
 

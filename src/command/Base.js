@@ -9,7 +9,7 @@ var prettyjson = require('src/util/pretty_json.js');
 var CmdResponse = require('src/core/CommandResponse.js');
 var deferred = require('node-promise').defer;
 var _ = require('underscore');
-var User = require('src/model/dynamodb/User.js');
+var User = require('src/model/mongodb/User.js');
 var Obj = require("object-path");
 
 module.exports = Class.extend({
@@ -30,6 +30,9 @@ module.exports = Class.extend({
         this.response.onSend(function(data){
             self._defr.resolve(data);
         });
+        this.response.onError(function(exception){
+            self._defr.reject(exception);
+        });
     },
 
     checkUser: function(callback){
@@ -38,9 +41,7 @@ module.exports = Class.extend({
         var uId = this.options.user_id;
         var self  = this;
 
-        User.keyExists(uId, function(bool, data){
-
-            data = User.normalizeItem((data)? data.Item: null);
+        User.keyExists(uId, function(bool){
 
             if (bool) {
                 callback(data);
@@ -64,7 +65,17 @@ module.exports = Class.extend({
 
     onDone: function(callback) {
 
-        this._defr.then(callback.bind(this));
+        callback = callback || _.noop;
+        var self = this;
+
+        this._defr
+            .then(function(data){
+
+                callback.call(this, null, data);
+            },function (error){
+
+                callback.call(this, error, null);
+            });
     },
 
     setDescriptor: function(val) {

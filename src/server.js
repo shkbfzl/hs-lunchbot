@@ -10,15 +10,15 @@ var server = require('express')();
 var Config = require('config');
 var Bot = require('src/core/Bot');
 var Boot = require('src/app/Boot.js');
-const PORT = Config.get('server.port');
+const PORT = Config.server.port;
 
 //
 server.use(BodyParser.json());
 server.use(BodyParser.urlencoded({ extended: false }));
 
 server.post('/bot', function(req, resp) {
-    console.log(req.body);
-    Bot.handler(req.body, {}, function(error, data){
+    log.debug(req.body);
+    Bot.run(req.body, {}, function(error, data){
 
         resp.send(data);
     });
