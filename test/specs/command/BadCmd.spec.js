@@ -44,8 +44,6 @@ describe("BadCmd.spec", function (){
         catch (e) {
             assert.isTrue(e instanceof CmdError);
         }
-
-
     });
 
     it("RejectCmd: should triggger promise ", function(done) {

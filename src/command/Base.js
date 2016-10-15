@@ -9,7 +9,6 @@ var prettyjson = require('src/util/pretty_json.js');
 var CmdResponse = require('src/core/CommandResponse.js');
 var deferred = require('node-promise').defer;
 var _ = require('underscore');
-var User = require('src/model/mongodb/User.js');
 var Obj = require("object-path");
 
 module.exports = Class.extend({
@@ -32,24 +31,6 @@ module.exports = Class.extend({
         });
         this.response.onError(function(exception){
             self._defr.reject(exception);
-        });
-    },
-
-    checkUser: function(callback){
-
-        callback = callback || _.noop();
-        var uId = this.options.user_id;
-        var self  = this;
-
-        User.keyExists(uId, function(bool){
-
-            if (bool) {
-                callback(data);
-                return;
-            }
-
-            var msg = "Hmm, I don't know you yet. Add yourself to my list.";
-            self.response.send(msg);
         });
     },
 

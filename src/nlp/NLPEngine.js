@@ -97,6 +97,8 @@ module.exports = Class.extend({
 
     process: function(text, callback) {
 
+        callback = callback || _.noop;
+
         // For safety let's catch all unhandled error
         try{
 
@@ -104,11 +106,7 @@ module.exports = Class.extend({
 
             var command = descriptor.createCommand(this.context);
 
-            command.onDone(function(result){
-
-                    callback(null, result)
-
-                });
+            command.onDone(callback);
 
             command.run();
         }

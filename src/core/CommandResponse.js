@@ -44,6 +44,8 @@ module.exports = Class.extend({
 
     error: function(exception){
 
+        //var data = this.buildResponse(text);
+        //log.debug("Error response data= ", data);
         this.trigger(ERROR_EVENT, exception);
     },
 

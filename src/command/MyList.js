@@ -6,53 +6,18 @@ require('rootpath')();
 
 var log = require('log4js').getLogger(__filename);
 var BaseCmd = require('src/command/Base.js');
-var User = require('src/model/dynamodb/User.js');
+var User = require('src/model/mongodb/User.js');
+var Auth = require('src/core/Auth');
+var Obj = require('object-path');
 
-var getUserLists = function(uId, callback) {
-    var userLists = {"Favorites":"","Bans":""};
 
-    // Get User record
-    User.getById(uId, function(err, data) {
-
-        if (err) {
-            log.error("Error= ",err);
-            callback(err);
-        }
-        else {
-            data = User.normalizeItem(data.Item);
-
-            if (data && data.Places) {
-                var bans = data.Banned;
-                var favoritesText = "";
-                var bansText = "";
-
-                // Split Places into Favorites and Bans
-                for(var key in data.Places) {
-                    if (bans.indexOf(key) == -1) {
-                        favoritesText += " - " + data.Places[key];
-                    }
-                    else {
-                        bansText += " - " + data.Places[key];
-                    }
-                };
-
-                if (favoritesText !== "") {
-                    userLists.Favorites = favoritesText;
-                }
-                if (bansText !== "") {
-                    userLists.Bans = bansText;                    
-                }
-
-                log.info(userLists);
-                callback(null, userLists);
-            }
-            else {
-                // No Data or no Places
-                var dataErr = new Error('Restaurants cannot be found.');
-                callback(dataErr);
-            }
-        }
-    });
+/**
+ *
+ * @constructor
+ */
+var RestaurantChoice = function(){
+    this.favorites = [];
+    this.bans = [];
 };
 
 
@@ -69,37 +34,80 @@ module.exports = BaseCmd.extend({
 
         log.info(this.options);
 
-        var self = this;
-        var uId = self.options.user_id;
+        var self = this,
+            uId = self.options.user_id;
 
-        getUserLists(uId, function(err, data){
+        Auth.checkUser(uId, function(err, user){
+
             if (err){
-                this.response.send("Lunch.io could not find any restaurant choices.");
+                self.response.error(err);
+                return;
+            }
+
+            var restaurantGroup = self.getUserLists(user);
+
+            self.setResponseAttachments(restaurantGroup);
+
+            self.response.done();
+        });
+    },
+
+    getUserLists: function(userData) {
+
+        var userLists = new RestaurantChoice(),
+            places,
+            bans;
+
+        log.debug("User data = ", userData);
+        userData = Obj(userData);
+        places = userData.get('places', []);
+        bans = userData.get('bans', []);
+
+        for(var key in places) {
+            if (bans.indexOf(key) == -1) {
+                userLists.favorites.push(places[key])
             }
             else {
-                if (data.Favorites) {
-                    this.response.addAttachment({
-                        title: "Favorite places.",
-                        mrkdwn_in: [
-                            "text"
-                        ],
-                        text: data.Favorites
-                    });
-                }
-                if (data.Bans) {
-                    this.response.addAttachment({
-                        title: "Banned places.",
-                        mrkdwn_in: [
-                            "text"
-                        ],
-                        text: data.Bans
-                    });
-                }
-                log.info(this.response);
-                this.response.send("Lunch.io is a tool that can" +
-                    " help your team choose a lunch " +
-                    "destination faster.");
+                userLists.bans.push(places[key]);
             }
+        }
+
+        log.debug("User list = ", userLists);
+
+        return userLists;
+    },
+
+    setResponseAttachments:function(myPlaces){
+
+        var favorites = "You have no restaurant in your list",
+            bannedPlaces = "You have no restaurant in your list";
+
+        if (myPlaces.favorites.length > 0) {
+            favorites = '\n- '+myPlaces.favorites.join("\n- ");
+        }
+
+        if (myPlaces.bans.length > 0) {
+            bannedPlaces = '\n- '+myPlaces.bans.join("\n-");
+        }
+
+        log.debug("Favorite places= ", favorites);
+        log.debug("Banned places= ", bannedPlaces);
+
+        this.response.addAttachment({
+            title: "Favorite places.",
+            mrkdwn_in: [
+                "text"
+            ],
+            text: favorites
+        });
+
+        this.response.addAttachment({
+            title: "Banned places.",
+            mrkdwn_in: [
+                "text"
+            ],
+            text: bannedPlaces
         });
     }
+
 });

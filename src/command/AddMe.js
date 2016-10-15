@@ -20,7 +20,7 @@ var createUser = function(uId, userName){
 
         if(err){
             log.error(err);
-            self.response.send("Oops, please :(");
+            self.response.error("Oops, I couldn't add your name to my list");
             return;
         }
         log.debug("User created= ", data);
@@ -48,7 +48,7 @@ module.exports = BaseCmd.extend({
         var userName = this.options.user_name;
 
         if (!userName) {
-            this.response.error("Hm, didn't get your name");
+            this.response.error("Hm, I didn't get your name");
             return;
         }
 
