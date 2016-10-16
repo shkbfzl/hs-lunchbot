@@ -13,19 +13,24 @@ var pjson = require('src/util/pretty_json');
 var Obj = require("object-path");
 var trimlow = require('src/util/trimlow_text.js');
 
+var OPEN_STATUS = 'open';
+var SCHEDULE_STATUS = 'scheduling';
+var CLOSED_STATUS = 'closed';
+
 module.exports = BaseModel.extend({}, {
 
     table: "Sessions",
 
-    create: function(key, users, callback) {
+    create: function(userId, userList, callback) {
 
-        return clientDB.putItem({
-            TableName: table,
-            Item: {
-                Id: {S: key},
-                Users: {S: users}
-            },
-        }, callback);
+        var timestamp = new Date().time();
+
+        this.collection()
+            .insert({
+                invitorId: userId,
+                invitees: userList,
+                status: OPEN_STATUS,
+                createdAt: timestamp
+            }, callback);
     },
-
 });

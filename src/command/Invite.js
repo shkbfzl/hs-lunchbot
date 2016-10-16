@@ -5,142 +5,101 @@
 require('rootpath')();
 
 var log = require('log4js').getLogger(__filename);
-var async = require('async');
+var aw = require('async').waterfall;
 var BaseCmd = require('src/command/Base.js');
 var Config = require('config');
-var Slack = require('slack-node');
-var Session = require('src/model/dynamodb/Session.js');
+var Auth = require('src/core/Auth');
+var SessionModel = require('src/model/mongodb/Session.js');
 var _ = require('underscore');
+var Promise = require('node-promise');
 
-var getChannelName = function() {
-    var channelName = new Date().toISOString().slice(0, 10);
-    return 'Lunch-' + channelName; 
-};
+var responseTexts = [
+    'That’s a solid crew you’ve assembled there.',
+    'I sent your invitation.'
+];
 
-var getSlack = function() {
-    var apiToken = Config.slack.api_token;
-    return new Slack(apiToken);
-};
 
-var normalizeUsersToInvite = function(usersToInvite) {
-    var results = [];
-    if (!usersToInvite) {
-        return results;
+var sendInvitations = function(invId, userList, callback) {
+
+    callback = callback || _.noop;
+    var self = this;
+
+    if (userList.length == 0) {
+        log.warn("No user to invite");
+        callback(null, invId);
     }
 
-    for (var i = 0; i < usersToInvite.length; i++) {
-        if (usersToInvite[i]) {
-            results[i] = usersToInvite[i].replace('@', '');
-        }
-    }
+    var defrList = [];
 
-    return results;
+    _.each (userList, function(user) {
+
+        var defr = self._invSender.invite(user);
+        defrList.push(defr);
+    });
+
+    Promise.When(defrList, callback);
 };
 
 module.exports = BaseCmd.extend({
 
     name: "invite",
     description: "invite people",
+    _invSender: null,
 
     initialize: function(){
         this._super();
+        this._invSender = new InviteSender();
     },
+
+    setInviteSender: function(obj) {
+
+        if (obj instanceof InvitationSender) {
+            var errMsg = 'Object must be instance of InvitationSender';
+            throw new IllegalArgumentError(errMsg);
+        }
+
+        this._invSender = obj;
+    },
+
     run: function() {
 
-        var texts = [
-            'That’s a solid crew you’ve assembled there.',
-            'I sent your invitation.'
-        ];
+        var slackUsers = this.options.users || [];
+        var userId = this.options.user_id;
+        var resp = this.response;
+        var self = this;
 
-        var randId = _.random(0,1);
-        this.response.send(texts[randId]);
+        log.debug("Invitees list= ",slackUsers);
 
-    },
+        if (slackUsers.length == 0) {
+            resp.error("You must give me a list of users to invite");
+            return;
+        }
 
-    runOld: function() {
-        var slackUsers = [];
-        var channelName = getChannelName();
-        var slack = getSlack();
-        var usersToInvite = normalizeUsersToInvite(this.options.users);
-        var commandResponseObj = this.response;
-
-        async.waterfall([
+        aw([
             function(cb) {
-                slack.api("users.list", function(err, response) {
-                    if (err) {
-                        cb(err, 'Unable to retrieve Slack user list');
-                        return;
-                    } else {
-                        console.log('slack user list: %j', response.members);
-                        slackUsers = response.members;
-                        cb(null, null);
-                    }
-                });
+                Auth.checkUser(userId, cb);
             },
-            function(result, cb) {
-                slack.api('channels.join', {
-                    name: channelName
-                }, function(err, response){
-                    console.log('channels.join response: %j', response);
-                    if (err) {
-                        cb(err, 'Cannot create channel');
-                        return;
-                    }
-                    cb(null, response);
-                });
+            function(resp, cb) {
+
+                SessionModel.create(userId, slackUsers, cb);
             },
-            function(result, cb) {
-                async.each(usersToInvite, function(userToInvite, callback) {
-                //slackUsers = _.indexBy(response.members, 'name');
-                
-                    var slackUser = _.findWhere(slackUsers, { 'name': userToInvite });
-                    if (slackUser === undefined) {
-                        console.log('Unable to find the user %j', userToInvite);
-                        callback();
-                    }
+            function (data, cb) {
+                log.debug("New invitation =", data);
 
-                    slack.api('channels.invite', {
-                        channel: result.channel.id,
-                        user: slackUser.id
-                    }, function(err, inviteResponse) {
-                        if (err) {
-                            console.log('Unable to invite %j with error: %j', slackUser.id, err);
-                        } else {
-                            console.log('channels.invite response: %j', inviteResponse);
-                        }
-                        callback();
-                    });
-                }, function(err) {
-                    cb(null, result);
-                });
-            },
-            function(result, cb) {
-                var self = this;
+                self._invitePoster.uniqId = data._id;
 
-                var usersToInviteString = JSON.stringify(usersToInvite);
-                Session.create(result.channel.id, usersToInviteString, function(err, data){
-
-                    if(err){
-                        console.log('Error creating new Session on the database: %j', err);
-                        commandResponseObj.send("Oops, please :(");
-                        return;
-                    }
-                    console.log("Session created= %j", data);
-                    cb(null, 'Success');
-                });
+                sendInvitations.call(self, slackUsers, cb);
             }
-        ], function(err, result) {
+        ], function(err, data){
+            log.debug("Error= ",err, ', data=',data);
+
             if (err) {
-                commandResponseObj.send('Error sending your invitation.  Please try again');
-            } else {
-                var texts = [
-                    'That’s a solid crew you’ve assembled there.',
-                    'I sent your invitation.'
-                ];
-
-                var randId = _.random(0,1);
-                commandResponseObj.send(texts[randId]);
+                resp.error(err);
+                return;
             }
+
+            var randId = _.random(0, 1);
+            resp.send(responseTexts[randId]);
         });
     }
 });

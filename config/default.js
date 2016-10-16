@@ -9,13 +9,6 @@ module.exports = {
       port: 50151
     },
 
-    dynamedb: {
-        host: 'http://localhost:50011',
-        key: "fakeAccessKey",
-        secret: "fakeSecretAccessKey",
-        region: 'fakeRegion', // Use fake region for local DynamoDB instance
-    },
-
     mongodb: {
         host: 'mongodb://localhost',
         port: 27017,
@@ -23,6 +16,9 @@ module.exports = {
     },
 
     slack: {
-    	api_token: 'fakeAPIToken'
+    	api_token: 'fakeAPIToken',
+        webHookURL: 'https://hooks.slack.com/services/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',
     },
+
+    inviteFeedbackUrl: 'http://localhost'
 }
