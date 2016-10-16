@@ -108,7 +108,7 @@ describe("command/MyList", function () {
             bans: ['p1', 'p4']
         };
 
-        it('Integeration test', function(done){
+        it('Integration test', function(done){
 
             var mdb = UserModel.collection();
 
