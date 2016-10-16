@@ -12,8 +12,8 @@ var Auth =  require('src/core/Auth');
 
 module.exports = BaseCmd.extend({
 
-    name: "hello",
-    description: "Being nice",
+    name: "RemoveRestaurant",
+    description: "Delete restaurant",
 
     initialize: function(){
         this._super();
