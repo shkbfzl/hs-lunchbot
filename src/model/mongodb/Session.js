@@ -5,10 +5,9 @@
 
 require('rootpath')();
 
-var clientDB = require('src/model/dynamodb/Client.js');
 var log = require('log4js').getLogger(__filename);
 var _ = require('underscore');
-var BaseModel = require('src/model/dynamodb/Base');
+var BaseModel = require('src/model/mongodb/Base');
 var shortid = require('shortid');
 var pjson = require('src/util/pretty_json');
 var Obj = require("object-path");
